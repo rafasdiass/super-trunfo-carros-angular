@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
 import { Player } from '../../models/player.model';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-game-board',
@@ -26,10 +27,12 @@ export class GameBoardComponent implements OnInit {
     ];
 
     console.log('Players initialized', players);
-    this.gameService.initializeGame(players);
-    console.log('Game initialized');
-    this.nextTurn();
+    this.gameService.initializeGame(players).subscribe(() => {
+      console.log('Game initialized');
+      this.nextTurn();
+    });
   }
+
 
   nextTurn() {
     console.log('nextTurn called');

@@ -1,9 +1,10 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { PokemonDetails } from '../models/pokemondetails.model';
 import { Card } from '../models/card.model';
+import { PokemonDetails, Stat, PokemonResponse } from '../models/pokemondetails.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,66 +13,77 @@ export class ApiService {
   private API_URL = 'https://pokeapi.co/api/v2/';
 
   constructor(private http: HttpClient) { }
-
   fetchCards(): Observable<Card[]> {
-    return this.fetchPokemonsList().pipe(
-      switchMap((pokemonsList: string[]) => {
-        console.log('Pokemons List:', pokemonsList);
-        return forkJoin(
-          pokemonsList.map((pokemon: string) => this.fetchPokemonDetails(pokemon))
-        );
+    const limit = 1000;
+    const url = `${this.API_URL}pokemon?limit=${limit}`;
+
+    return this.http.get<PokemonResponse>(url).pipe(
+      map(response => {
+        console.log(response);  // Imprime a resposta no console
+        return response;
       }),
-      map((pokemonsDetails: any[]) => {
-        console.log('Pokemons Details:', pokemonsDetails);
-        return pokemonsDetails.map((pokemonDetails: any) => this.transformToCard(pokemonDetails));
-      })
+      switchMap((response: PokemonResponse) =>
+        forkJoin(
+          response.results.map((item: { name: string; }) =>
+            this.fetchPokemonDetails(item.name)
+          )
+        )
+      ),
+      map((pokemonDetails: PokemonDetails[]) =>
+        pokemonDetails.map((details: PokemonDetails) =>
+          this.transformToCard(details)
+        )
+      )
     );
-  }
+}
+
+
 
   fetchRandomCard(): Observable<Card> {
-    return this.fetchPokemonsList().pipe(
-      switchMap((pokemonsList: string[]) => {
-        console.log('Pokemons List:', pokemonsList);
-        const randomIndex = Math.floor(Math.random() * pokemonsList.length);
-        const randomPokemon = pokemonsList[randomIndex];
-        return this.fetchPokemonDetails(randomPokemon);
-      }),
-      map((pokemonDetails: any) => {
-        console.log('Random Pokemon Details:', pokemonDetails);
-        return this.transformToCard(pokemonDetails);
-      })
-    );
-  }
-  private fetchPokemonsList(): Observable<string[]> {
     const url = `${this.API_URL}pokemon?limit=1000`;
+
     return this.http.get<any>(url).pipe(
-      map(response => {
-        console.log('fetchPokemonsList response:', response);
-        return response.results.map((item: any) => item.name);
-      })
+      map((response: any) => {
+        const randomIndex = Math.floor(Math.random() * response.results.length);
+        return response.results[randomIndex].name;
+      }),
+      switchMap((randomPokemon: string) =>
+        this.fetchPokemonDetails(randomPokemon)
+      ),
+      map((pokemonDetails: PokemonDetails) =>
+        this.transformToCard(pokemonDetails)
+      )
     );
   }
-  private fetchPokemonDetails(pokemon: string): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}pokemon/${pokemon}`).pipe(
-      map(response => {
-        console.log('fetchPokemonDetails response:', response);
-        return response;
-      })
+  private fetchPokemonDetails(pokemonName: string): Observable<PokemonDetails> {
+    const url = `${this.API_URL}pokemon/${pokemonName}`;
+    return this.http.get<any>(url).pipe(
+      map(response => new PokemonDetails(
+        response.id,
+        response.name,
+        response.sprites,
+        response.stats.map((stat: any) => new Stat(stat.base_stat, stat.stat))
+      ))
     );
   }
 
-  private transformToCard(pokemonDetails: any): Card {
-    console.log('Transforming Pokemon:', pokemonDetails);
+
+  private transformToCard(pokemonDetails: PokemonDetails): Card {
+    const findStatValue = (statName: string): number => {
+      const stat: Stat | undefined = pokemonDetails.stats.find((stat: { stat: { name: string; }; }) => stat.stat.name === statName);
+      return stat ? stat.base_stat : 0;
+    };
+
     return new Card(
       pokemonDetails.id,
       pokemonDetails.name,
       pokemonDetails.sprites.front_default,
-      pokemonDetails.stats[0]?.base_stat || 0,  // HP
-      pokemonDetails.stats[1]?.base_stat || 0,  // Attack
-      pokemonDetails.stats[2]?.base_stat || 0,  // Defense
-      pokemonDetails.stats[3]?.base_stat || 0,  // Special Attack
-      pokemonDetails.stats[4]?.base_stat || 0,  // Special Defense
-      pokemonDetails.stats[5]?.base_stat || 0,  // Speed
+      findStatValue('hp'),
+      findStatValue('attack'),
+      findStatValue('defense'),
+      findStatValue('special-attack'),
+      findStatValue('special-defense'),
+      findStatValue('speed')
     );
   }
 }
