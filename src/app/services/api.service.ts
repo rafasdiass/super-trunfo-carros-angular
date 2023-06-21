@@ -9,7 +9,7 @@ import { Card } from '../models/card.model';
   providedIn: 'root'
 })
 export class ApiService {
-  private API_URL = 'https://pokeapi.co/api/v2/pokemon?limit=50';
+  private API_URL = 'https://pokeapi.co/api/v2/';
 
   constructor(private http: HttpClient) { }
 
@@ -42,18 +42,17 @@ export class ApiService {
       })
     );
   }
-
   private fetchPokemonsList(): Observable<string[]> {
-    return this.http.get<any>(this.API_URL).pipe(
+    const url = `${this.API_URL}pokemon?limit=1000`;
+    return this.http.get<any>(url).pipe(
       map(response => {
         console.log('fetchPokemonsList response:', response);
         return response.results.map((item: any) => item.name);
       })
     );
   }
-
   private fetchPokemonDetails(pokemon: string): Observable<any> {
-    return this.http.get(`https://pokeapi.co/api/v2/pokemon/${pokemon}`).pipe(
+    return this.http.get<any>(`${this.API_URL}pokemon/${pokemon}`).pipe(
       map(response => {
         console.log('fetchPokemonDetails response:', response);
         return response;
