@@ -1,4 +1,5 @@
-<div>
+<div class ="game-container">
+<div class="player-container">
   <h2>Player: {{ playerCard?.name }}</h2>
   <img [src]="playerCard?.imageUrl" alt="Player Card">
   <ul>
@@ -27,6 +28,7 @@
     <li>Special Attack: {{ computerCard?.specialAttack }}</li>
     <li>Special Defense: {{ computerCard?.specialDefense }}</li>
   </ul>
+</div>
 </div>
 <h2>Player Wins: {{ playerWins }}</h2>
 <h2>Computer Wins: {{ computerWins }}</h2>
