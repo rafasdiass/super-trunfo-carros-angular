@@ -1,28 +1,30 @@
-
-
-<div class="computer-card">
-  <h3>Computer Card</h3>
-  <div *ngIf="computerCard">
-    <p>Speed: {{ computerCard.speed }}</p>
-    <p>Power: {{ computerCard.power }}</p>
-    <p>Price: {{ computerCard.price }}</p>
-  </div>
-</div>
-
-<div class="player-cards">
-  <h3>Your Cards</h3>
+<div>
+  <h2>Player: {{ playerCard?.name }}</h2>
+  <img [src]="playerCard?.imageUrl" alt="Player Card">
   <ul>
-    <li *ngFor="let card of playerCard['cards']">
-      <p>Card Name: {{ card.name }}</p>
-      <p>Speed: {{ card.speed }}</p>
-      <p>Power: {{ card.power }}</p>
-      <p>Price: {{ card.price }}</p>
-    </li>
+    <li>Attack: {{ playerCard?.attack }}</li>
+    <li>Defense: {{ playerCard?.defense }}</li>
+    <li>HP: {{ playerCard?.hp }}</li>
+    <li>Speed: {{ playerCard?.speed }}</li>
+    <li>Special Attack: {{ playerCard?.specialAttack }}</li>
+    <li>Special Defense: {{ playerCard?.specialDefense }}</li>
   </ul>
+  <button (click)="compareAttributes('attack')">Attack</button>
+  <button (click)="compareAttributes('defense')">Defense</button>
+  <button (click)="compareAttributes('hp')">HP</button>
+  <button (click)="compareAttributes('speed')">Speed</button>
+  <button (click)="compareAttributes('specialAttack')">Special Attack</button>
+  <button (click)="compareAttributes('specialDefense')">Special Defense</button>
 </div>
-
-<div class="comparison-buttons">
-  <button (click)="playTurn('speed')">Compare Speed</button>
-  <button (click)="playTurn('power')">Compare Power</button>
-  <button (click)="playTurn('price')">Compare Price</button>
+<div>
+  <h2>Computer: {{ computerCard?.name }}</h2>
+  <img [src]="computerCard?.imageUrl" alt="Computer Card">
+  <ul>
+    <li>Attack: {{ computerCard?.attack }}</li>
+    <li>Defense: {{ computerCard?.defense }}</li>
+    <li>HP: {{ computerCard?.hp }}</li>
+    <li>Speed: {{ computerCard?.speed }}</li>
+    <li>Special Attack: {{ computerCard?.specialAttack }}</li>
+    <li>Special Defense: {{ computerCard?.specialDefense }}</li>
+  </ul>
 </div>

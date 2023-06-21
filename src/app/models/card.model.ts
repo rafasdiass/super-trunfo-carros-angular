@@ -1,12 +1,15 @@
 export class Card {
-[x: string]: any;
+  [key: string]: number | string;
+
   constructor(
     public id: number,
-    public make: string,
-    public model: string,
-    public speed: number,
-    public power: number,
-    public price: number,
-    public year: number
-  ) { }
+    public name: string,
+    public imageUrl: string,
+    public hp: number,
+    public attack: number,
+    public defense: number,
+    public specialAttack: number,
+    public specialDefense: number,
+    public speed: number
+  ) {}
 }

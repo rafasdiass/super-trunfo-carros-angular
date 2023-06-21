@@ -1,14 +1,18 @@
 <mat-card class="card" *ngIf="card">
   <mat-card-header>
-    <mat-card-title>{{ card.make }} {{ card.model }}</mat-card-title>
-    <mat-card-subtitle>{{ card.year }}</mat-card-subtitle>
+    <img mat-card-avatar [src]="card.imageUrl" alt="Imagem do Pokémon">
+    <mat-card-title>{{ card.name }}</mat-card-title>
+    <mat-card-subtitle>ID: {{ card.id }}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
     <p>
-      Velocidade: {{ card.speed }}<br>
-      Potência: {{ card.power }}<br>
-      Preço: {{ card.price }}
+      HP: {{ card.hp }}<br>
+      Ataque: {{ card.attack }}<br>
+      Defesa: {{ card.defense }}<br>
+      Ataque Especial: {{ card.specialAttack }}<br>
+      Defesa Especial: {{ card.specialDefense }}<br>
+      Velocidade: {{ card.speed }}
     </p>
   </mat-card-content>
 </mat-card>

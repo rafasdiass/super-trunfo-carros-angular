@@ -1,69 +1,75 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
 import { Player } from '../../models/player.model';
-import { ApiService } from '../../services/api.service';
-import { Observable } from 'rxjs';
-import { shuffle } from 'lodash';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-game-board',
   templateUrl: './game-board.component.html',
   styleUrls: ['./game-board.component.scss']
 })
-export class GameBoardComponent {
-  playerCard!: Card;
-  computerCard!: Card;
-  winner!: string;
+export class GameBoardComponent implements OnInit {
+  playerCard: Card | undefined;
+  computerCard: Card | undefined;
+  winner: string;
 
-  constructor(private gameService: GameService, private apiService: ApiService) {
-    const player1 = new Player("Player 1", [], false);
-    const player2 = new Player("Player 2", [], false);
-    const players: Player[] = [player1, player2];
-
-    // Atribuir cartas aos jogadores
-    this.getInitialPlayerCards().subscribe(cards => {
-      player1.cards = cards.slice(0, 5);
-      player2.cards = cards.slice(5, 10);
-    });
-
-    console.log('Players:', players);
-
-    if (players.length >= 2) {
-      this.gameService.initializeGame(players);
-      this.nextTurn();
-    } else {
-      console.log('Not enough players to start the game');
-    }
+  constructor(private gameService: GameService) {
+    this.winner = '';
+    console.log('GameBoardComponent constructor called');
   }
 
-  nextTurn() {
-    try {
-      [this.playerCard, this.computerCard] = this.gameService.drawCards();
-    } catch (error) {
-      console.log('Error drawing cards:');
-    }
-  }
+  ngOnInit() {
+    console.log('OnInit called');
+    const players: Player[] = [
+      new Player("Player 1"),
+      new Player("Player 2")
+    ];
 
-  playTurn(attribute: keyof Card) {
-    if (this.playerCard[attribute] > this.computerCard[attribute]) {
-      this.winner = 'Player';
-    } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
-      this.winner = 'Computer';
-    } else {
-      this.winner = 'Draw';
-    }
+    console.log('Players initialized', players);
+    this.gameService.initializeGame(players);
+    console.log('Game initialized');
     this.nextTurn();
   }
 
-  private getInitialPlayerCards(): Observable<Card[]> {
-    return this.apiService.fetchCards().pipe(
-      map((cards: Card[]) => this.shuffleCards(cards))
-    );
+  nextTurn() {
+    console.log('nextTurn called');
+    const drawnCards = this.gameService.drawCards();
+    this.playerCard = drawnCards[0];
+    this.computerCard = drawnCards[1];
+    console.log('Cards drawn', this.playerCard, this.computerCard);
   }
 
-  private shuffleCards(cards: Card[]): Card[] {
-    return shuffle(cards);
+  playTurn(attribute: keyof Card) {
+    console.log('playTurn called', attribute);
+    if (this.playerCard && this.computerCard) {
+      console.log('Both cards available', this.playerCard, this.computerCard);
+      if (this.playerCard[attribute] > this.computerCard[attribute]) {
+        this.winner = 'Player';
+      } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
+        this.winner = 'Computer';
+      } else {
+        this.winner = 'Draw';
+      }
+      console.log('Winner of the turn', this.winner);
+      this.nextTurn();
+    } else {
+      console.log('End of game, no cards left');
+    }
+  }
+  compareAttributes(attribute: string) {
+    // Código para comparar atributos
+    // Esse é apenas um exemplo, você precisa implementar a lógica de acordo com suas necessidades
+    if (this.playerCard && this.computerCard) {
+      if (this.playerCard[attribute] > this.computerCard[attribute]) {
+        this.winner = 'Player';
+      } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
+        this.winner = 'Computer';
+      } else {
+        this.winner = 'Draw';
+      }
+      console.log('Winner of the attribute comparison', this.winner);
+    } else {
+      console.log('Cards not available for comparison');
+    }
   }
 }
