@@ -9,12 +9,12 @@
     <li>Special Attack: {{ playerCard?.specialAttack }}</li>
     <li>Special Defense: {{ playerCard?.specialDefense }}</li>
   </ul>
-  <button (click)="compareAttributes('attack')">Attack</button>
-  <button (click)="compareAttributes('defense')">Defense</button>
-  <button (click)="compareAttributes('hp')">HP</button>
-  <button (click)="compareAttributes('speed')">Speed</button>
-  <button (click)="compareAttributes('specialAttack')">Special Attack</button>
-  <button (click)="compareAttributes('specialDefense')">Special Defense</button>
+  <button (click)="playTurn('attack')">Attack</button>
+  <button (click)="playTurn('defense')">Defense</button>
+  <button (click)="playTurn('hp')">HP</button>
+  <button (click)="playTurn('speed')">Speed</button>
+  <button (click)="playTurn('specialAttack')">Special Attack</button>
+  <button (click)="playTurn('specialDefense')">Special Defense</button>
 </div>
 <div>
   <h2>Computer: {{ computerCard?.name }}</h2>
@@ -28,3 +28,5 @@
     <li>Special Defense: {{ computerCard?.specialDefense }}</li>
   </ul>
 </div>
+<h2>Player Wins: {{ playerWins }}</h2>
+<h2>Computer Wins: {{ computerWins }}</h2>

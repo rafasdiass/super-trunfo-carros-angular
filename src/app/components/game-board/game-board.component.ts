@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
 import { Player } from '../../models/player.model';
-import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-game-board',
@@ -13,9 +12,13 @@ export class GameBoardComponent implements OnInit {
   playerCard: Card | undefined;
   computerCard: Card | undefined;
   winner: string;
+  playerWins: number;
+  computerWins: number;
 
   constructor(private gameService: GameService) {
     this.winner = '';
+    this.playerWins = 0;
+    this.computerWins = 0;
     console.log('GameBoardComponent constructor called');
   }
 
@@ -33,7 +36,6 @@ export class GameBoardComponent implements OnInit {
     });
   }
 
-
   nextTurn() {
     console.log('nextTurn called');
     const drawnCards = this.gameService.drawCards();
@@ -48,8 +50,10 @@ export class GameBoardComponent implements OnInit {
       console.log('Both cards available', this.playerCard, this.computerCard);
       if (this.playerCard[attribute] > this.computerCard[attribute]) {
         this.winner = 'Player';
+        this.playerWins++;
       } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
         this.winner = 'Computer';
+        this.computerWins++;
       } else {
         this.winner = 'Draw';
       }
@@ -57,22 +61,6 @@ export class GameBoardComponent implements OnInit {
       this.nextTurn();
     } else {
       console.log('End of game, no cards left');
-    }
-  }
-  compareAttributes(attribute: string) {
-    // Código para comparar atributos
-    // Esse é apenas um exemplo, você precisa implementar a lógica de acordo com suas necessidades
-    if (this.playerCard && this.computerCard) {
-      if (this.playerCard[attribute] > this.computerCard[attribute]) {
-        this.winner = 'Player';
-      } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
-        this.winner = 'Computer';
-      } else {
-        this.winner = 'Draw';
-      }
-      console.log('Winner of the attribute comparison', this.winner);
-    } else {
-      console.log('Cards not available for comparison');
     }
   }
 }
