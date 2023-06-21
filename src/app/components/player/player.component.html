@@ -1,0 +1,5 @@
+<div class="player">
+  <h2>{{ player.name }}</h2>
+  <p>Cartas restantes: {{ player.cards.length }}</p>
+  <app-card *ngIf="player.currentCard" [card]="player.currentCard"></app-card>
+</div>
