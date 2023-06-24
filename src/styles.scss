@@ -2,3 +2,11 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@font-face {
+    font-family: 'PokemonFont';
+    src: url('./assets/pokemon pack1/fonts/Pokemon\ Solid.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
