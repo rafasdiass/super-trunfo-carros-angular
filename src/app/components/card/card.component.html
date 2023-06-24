@@ -1,18 +1,17 @@
-<mat-card class="card" *ngIf="card">
-  <mat-card-header>
-    <img mat-card-avatar [src]="card.imageUrl" alt="Imagem do Pokémon" class="pokemon-image">
-    <mat-card-title>{{ card.name }}</mat-card-title>
-    <mat-card-subtitle>ID: {{ card.id }}</mat-card-subtitle>
-  </mat-card-header>
+<div *ngIf="card" class="card-container">
+  <h2>{{ card.name.charAt(0).toUpperCase() + card.name.slice(1) }}</h2>
+  <img [src]="card.imageUrl" alt="Card Image" class="pokemon-img">
 
-  <mat-card-content>
-    <p>
-      HujP: {{ card.hp }}<br>
-      Ataque: {{ card.attack }}<br>
-      Defesa: {{ card.defense }}<br>
-      Ataque Especial: {{ card.specialAttack }}<br>
-      Defesa Especial: {{ card.specialDefense }}<br>
-      Velocidade: {{ card.speed }}
-    </p>
-  </mat-card-content>
-</mat-card>
+  <!-- Atributos e botões -->
+  <div *ngIf="showAttributes">
+    <div class="attributes-container"
+         *ngFor="let attribute of ['attack', 'defense', 'hp', 'speed', 'specialAttack', 'specialDefense']">
+      <span style="font-size: 15px; font-weight: bold;">
+        {{ card[attribute] }}
+      </span>
+      <div class="btn btn-one" *ngIf="showAttributeButtons" (click)="selectAttribute(attribute)">
+        <span>{{ attribute | titlecase }}</span>
+      </div>
+    </div>
+  </div>
+</div>

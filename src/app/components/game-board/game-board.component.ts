@@ -43,7 +43,6 @@ export class GameBoardComponent implements OnInit {
     this.computerCard = drawnCards[1];
     console.log('Cards drawn', this.playerCard, this.computerCard);
   }
-
   playTurn(attribute: keyof Card) {
     console.log('playTurn called', attribute);
     if (this.playerCard && this.computerCard) {
@@ -51,11 +50,14 @@ export class GameBoardComponent implements OnInit {
       if (this.playerCard[attribute] > this.computerCard[attribute]) {
         this.winner = 'Player';
         this.playerWins++;
+        window.alert('Voce venceu esse turno');
       } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
         this.winner = 'Computer';
         this.computerWins++;
+        window.alert('Voce perdeu esse turno.');
       } else {
         this.winner = 'Draw';
+        window.alert('This round is a draw.');
       }
       console.log('Winner of the turn', this.winner);
       this.nextTurn();

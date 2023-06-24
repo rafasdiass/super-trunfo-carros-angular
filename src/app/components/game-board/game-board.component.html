@@ -6,76 +6,13 @@
     </div> -->
     <div class="player-container">
       <div class="elements-inside">
-        <br>
-        <div *ngIf="playerCard">
-          
-          <h2 style="text-align: center;">{{ playerCard.name.charAt(0).toUpperCase() + playerCard.name.slice(1) }}</h2>
-          <img [src]="playerCard.imageUrl" alt="Player Card" class="pokemon-img">
-        </div>
-
-          <span style="font-size: 15px; font-weight: bold;">
-            {{ playerCard?.attack }}
-          </span>
-
-        <div class="btn btn-one" (click)="playTurn('attack')">
-          <span>Attack</span>
-        </div>
-
-          <span style="font-size: 15px; font-weight: bold;">
-            {{ playerCard?.defense }}
-          </span>
-
-        <div class="btn btn-one" (click)="playTurn('defense')">
-          <span>Defense</span>
-        </div>
-
-        <span style="font-size: 15px; font-weight: bold;">
-          {{ playerCard?.hp }}
-        </span>
-       
-        <div class="btn btn-one" (click)="playTurn('hp')">
-          <span>HP</span>
-        </div>
-
-        <span style="font-size: 15px; font-weight: bold;">
-          {{ playerCard?.speed }}
-        </span>
-        
-        <div class="btn btn-one" (click)="playTurn('speed')">
-          <span>Speed</span>
-        </div>
-
-        <span style="font-size: 15px; font-weight: bold;">
-          {{ playerCard?.specialAttack }}
-        </span>
-
-        <div class="btn btn-one" (click)="playTurn('specialAttack')">
-          <span>Special Attack</span>
-        </div>
-
-        <span style="font-size: 15px; font-weight: bold;">
-          {{ playerCard?.specialDefense }}
-        </span>
-       
-        <div class="btn btn-one" (click)="playTurn('specialDefense')">
-          <span>Special Defense</span>
-        </div>
+        <app-card [card]="playerCard" [showAttributeButtons]="true" (attributeSelected)="playTurn($event)"></app-card>
       </div>
     </div>
     <div class="card2">
       <div class="player2-container">
         <div class="elements-inside">
-          <br>
-          <h2>Computer: {{ computerCard?.name }}</h2>
-          <img [src]="computerCard?.imageUrl" alt="Computer Card" class="pokemon-img">
-          <ul>
-            <li>Attack: {{ computerCard?.attack }}</li>
-            <li>Defense: {{ computerCard?.defense }}</li>
-            <li>HP: {{ computerCard?.hp }}</li>
-            <li>Speed: {{ computerCard?.speed }}</li>
-            <li>Special Attack: {{ computerCard?.specialAttack }}</li>
-            <li>Special Defense: {{ computerCard?.specialDefense }}</li>
-          </ul>
+          <app-card [card]="computerCard" [showAttributes]="false"></app-card>
         </div>
       </div>
     </div>
