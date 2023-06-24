@@ -1,3 +1,7 @@
+*{
+  font-family: 'PokemonFont';
+}
+
 .bg-image{
   background: url('../../../assets/pokemon pack1/tela-batalha2.png') no-repeat center center/cover;
   width: 1640px;
@@ -52,3 +56,23 @@
   align-items: center;
   margin-bottom: 7rem;
 }
+
+.gif-container img{
+  width: 140px;
+}
+
+.card2 .rival-message{
+  background-image: url('../../../assets/rivals/balao-speech.fw.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 30px;
+  display: inline-block;
+}
+
+.rival-message span{
+ align-items: center;
+ justify-content: center;
+}
+
+
+
