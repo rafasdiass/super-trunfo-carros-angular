@@ -1,6 +1,26 @@
+//ajusta background e tamanho da imagem do pokemon
 .pokemon-img {
   width: 250px;
   align-items: center;
+  background-color: #00000080;
+  border-radius: 5px;
+  width: 230px;
+  margin-bottom: 10px;
+}
+
+//ajusta background e tamanho do nome do pokemon
+.pokemon-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.pokemon-name h2{
+  background-color: #000000d3;
+  color: #ffffff67;
+  border-radius: 5px;
+  width: 230px;
 }
 
 .elements-inside{
@@ -12,7 +32,7 @@
 
 // BUTTON
 div[class*=box] {
-  height: 33.33%;
+  height: 40%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -23,9 +43,9 @@ div[class*=box] {
   line-height: 25px;
   height: 25px;
   text-align: center;
-  width: 382px;
+  width: 380px;
   cursor: pointer;
-  background-color: rgba(255, 255, 0, 0.404);
+  background-color: #ffff0067;
 }
 
 .btn-one {
