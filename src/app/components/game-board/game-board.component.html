@@ -1,34 +1,84 @@
-<div class ="game-container">
-<div class="player-container">
-  <h2>Player: {{ playerCard?.name }}</h2>
-  <img [src]="playerCard?.imageUrl" alt="Player Card">
-  <ul>
-    <li>Attack: {{ playerCard?.attack }}</li>
-    <li>Defense: {{ playerCard?.defense }}</li>
-    <li>HP: {{ playerCard?.hp }}</li>
-    <li>Speed: {{ playerCard?.speed }}</li>
-    <li>Special Attack: {{ playerCard?.specialAttack }}</li>
-    <li>Special Defense: {{ playerCard?.specialDefense }}</li>
-  </ul>
-  <button (click)="playTurn('attack')">Attack</button>
-  <button (click)="playTurn('defense')">Defense</button>
-  <button (click)="playTurn('hp')">HP</button>
-  <button (click)="playTurn('speed')">Speed</button>
-  <button (click)="playTurn('specialAttack')">Special Attack</button>
-  <button (click)="playTurn('specialDefense')">Special Defense</button>
-</div>
-<div>
-  <h2>Computer: {{ computerCard?.name }}</h2>
-  <img [src]="computerCard?.imageUrl" alt="Computer Card">
-  <ul>
-    <li>Attack: {{ computerCard?.attack }}</li>
-    <li>Defense: {{ computerCard?.defense }}</li>
-    <li>HP: {{ computerCard?.hp }}</li>
-    <li>Speed: {{ computerCard?.speed }}</li>
-    <li>Special Attack: {{ computerCard?.specialAttack }}</li>
-    <li>Special Defense: {{ computerCard?.specialDefense }}</li>
-  </ul>
-</div>
-</div>
-<h2>Player Wins: {{ playerWins }}</h2>
-<h2>Computer Wins: {{ computerWins }}</h2>
+<body class="bg-image">
+  <div class="game-container">
+    <!-- <div class="players">
+      <label class="player-name1">aaa</label>
+      <label class="player-name2">aaa</label>
+    </div> -->
+    <div class="player-container">
+      <div class="elements-inside">
+        <br>
+        <div *ngIf="playerCard">
+          <h2 style="text-align: center;">{{ playerCard.name.charAt(0).toUpperCase() + playerCard.name.slice(1) }}</h2>
+          <img [src]="playerCard.imageUrl" alt="Player Card" class="pokemon-img">
+        </div>
+        
+          <span style="font-size: 15px; font-weight: bold;">
+            {{ playerCard?.attack }}
+          </span>
+
+        <div class="btn btn-one" (click)="playTurn('attack')">
+          <span>Attack</span>
+        </div>
+
+          <span style="font-size: 15px; font-weight: bold;">
+            {{ playerCard?.defense }}
+          </span>
+
+        <div class="btn btn-one" (click)="playTurn('defense')">
+          <span>Defense</span>
+        </div>
+
+        <span style="font-size: 15px; font-weight: bold;">
+          {{ playerCard?.hp }}
+        </span>
+       
+        <div class="btn btn-one" (click)="playTurn('hp')">
+          <span>HP</span>
+        </div>
+
+        <span style="font-size: 15px; font-weight: bold;">
+          {{ playerCard?.speed }}
+        </span>
+        
+        <div class="btn btn-one" (click)="playTurn('speed')">
+          <span>Speed</span>
+        </div>
+
+        <span style="font-size: 15px; font-weight: bold;">
+          {{ playerCard?.specialAttack }}
+        </span>
+
+        <div class="btn btn-one" (click)="playTurn('specialAttack')">
+          <span>Special Attack</span>
+        </div>
+
+        <span style="font-size: 15px; font-weight: bold;">
+          {{ playerCard?.specialDefense }}
+        </span>
+       
+        <div class="btn btn-one" (click)="playTurn('specialDefense')">
+          <span>Special Defense</span>
+        </div>
+      </div>
+    </div>
+    <div class="card2">
+      <div class="player2-container">
+        <div class="elements-inside">
+          <br>
+          <h2>Computer: {{ computerCard?.name }}</h2>
+          <img [src]="computerCard?.imageUrl" alt="Computer Card" class="pokemon-img">
+          <ul>
+            <li>Attack: {{ computerCard?.attack }}</li>
+            <li>Defense: {{ computerCard?.defense }}</li>
+            <li>HP: {{ computerCard?.hp }}</li>
+            <li>Speed: {{ computerCard?.speed }}</li>
+            <li>Special Attack: {{ computerCard?.specialAttack }}</li>
+            <li>Special Defense: {{ computerCard?.specialDefense }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h2>Player Wins: {{ playerWins }}</h2>
+  <h2>Computer Wins: {{ computerWins }}</h2>
+</body>

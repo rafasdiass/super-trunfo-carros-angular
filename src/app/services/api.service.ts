@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
@@ -13,19 +12,20 @@ export class ApiService {
   private API_URL = 'https://pokeapi.co/api/v2/';
 
   constructor(private http: HttpClient) { }
-  fetchCards(): Observable<Card[]> {
-    const limit = 1000;
-    const url = `${this.API_URL}pokemon?limit=${limit}`;
 
-    return this.http.get<PokemonResponse>(url).pipe(
-      map(response => {
-        console.log(response);  // Imprime a resposta no console
-        return response;
-      }),
-      switchMap((response: PokemonResponse) =>
+  private fetchPokemonType(type: string): Observable<any> {
+    const url = `${this.API_URL}type/${type}`;
+    return this.http.get<any>(url).pipe(
+      map(response => response.pokemon)
+    );
+  }
+
+  fetchFirePokemon(): Observable<Card[]> {
+    return this.fetchPokemonType('fire').pipe(
+      switchMap((pokemons: any[]) =>
         forkJoin(
-          response.results.map((item: { name: string; }) =>
-            this.fetchPokemonDetails(item.name)
+          pokemons.map((item: { pokemon: { name: string; }; }) =>
+            this.fetchPokemonDetails(item.pokemon.name)
           )
         )
       ),
@@ -35,9 +35,24 @@ export class ApiService {
         )
       )
     );
-}
+  }
 
-
+  fetchWaterPokemon(): Observable<Card[]> {
+    return this.fetchPokemonType('water').pipe(
+      switchMap((pokemons: any[]) =>
+        forkJoin(
+          pokemons.map((item: { pokemon: { name: string; }; }) =>
+            this.fetchPokemonDetails(item.pokemon.name)
+          )
+        )
+      ),
+      map((pokemonDetails: PokemonDetails[]) =>
+        pokemonDetails.map((details: PokemonDetails) =>
+          this.transformToCard(details)
+        )
+      )
+    );
+  }
 
   fetchRandomCard(): Observable<Card> {
     const url = `${this.API_URL}pokemon?limit=1000`;
@@ -55,6 +70,7 @@ export class ApiService {
       )
     );
   }
+
   private fetchPokemonDetails(pokemonName: string): Observable<PokemonDetails> {
     const url = `${this.API_URL}pokemon/${pokemonName}`;
     return this.http.get<any>(url).pipe(
@@ -66,7 +82,6 @@ export class ApiService {
       ))
     );
   }
-
 
   private transformToCard(pokemonDetails: PokemonDetails): Card {
     const findStatValue = (statName: string): number => {
