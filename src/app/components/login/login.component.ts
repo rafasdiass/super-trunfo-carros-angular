@@ -5,7 +5,7 @@ import { SocialAuthService, GoogleLoginProvider } from 'angularx-social-login';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   constructor(private authService: AuthService, private socialAuthService: SocialAuthService) {}

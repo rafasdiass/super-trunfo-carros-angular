@@ -11,6 +11,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule } from '@angular/forms';
+import { HomeComponent } from './components/home/home.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { FormsModule } from '@angular/forms';
     GameBoardComponent,
     CardComponent,
     PlayerComponent,
-    LoginComponent
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
