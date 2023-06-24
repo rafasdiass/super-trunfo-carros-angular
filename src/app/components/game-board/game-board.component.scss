@@ -13,7 +13,6 @@
 .score {
   display: flex;
   justify-content: center;
-  gap: 30px;
   margin-left: 35%;
   margin-right: 35%;
   padding: 15px;
@@ -28,7 +27,7 @@
 
 .score .text-score.red {
   color: red !important;
-  padding: 5px;
+  padding: 15px;
 }
 
 
