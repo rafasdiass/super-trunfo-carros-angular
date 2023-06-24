@@ -1,12 +1,19 @@
 <body class="bg-image">
+  <div class="score">
+      <h2 class="text-score">Player<span class="text-score red">{{ playerWins }}</span></h2>
+      <h2>X</h2>
+      <h2 class="text-score"> <span class="text-score red">{{ computerWins }}</span>Computer</h2>
+  </div>
   <div class="game-container">
     <!-- <div class="players">
       <label class="player-name1">aaa</label>
       <label class="player-name2">aaa</label>
     </div> -->
-    <div class="player-container">
+    <div class="player-container" >
       <div class="elements-inside">
-        <app-card [card]="playerCard" [showAttributeButtons]="true" (attributeSelected)="playTurn($event)"></app-card>
+        <div class="alert alert-primary" role="alert">
+          <app-card [card]="playerCard" [showAttributeButtons]="true" (attributeSelected)="playTurn($event)"></app-card>
+        </div>
       </div>
     </div>
     <div class="card2">
@@ -17,6 +24,4 @@
       </div>
     </div>
   </div>
-  <h2>Player Wins: {{ playerWins }}</h2>
-  <h2>Computer Wins: {{ computerWins }}</h2>
 </body>

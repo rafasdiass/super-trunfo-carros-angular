@@ -1,5 +1,8 @@
 <div *ngIf="card" class="card-container">
-  <h2>{{ card.name.charAt(0).toUpperCase() + card.name.slice(1) }}</h2>
+  <br>
+  <div class="pokemon-name">
+    <h2>{{ card.name.charAt(0).toUpperCase() + card.name.slice(1) }}</h2>
+  </div>
   <img [src]="card.imageUrl" alt="Card Image" class="pokemon-img">
 
   <!-- Atributos e botões -->
