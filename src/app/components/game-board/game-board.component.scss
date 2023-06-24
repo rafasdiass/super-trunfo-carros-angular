@@ -20,6 +20,12 @@
   height: 600px;
 }
 
+.players{
+  margin-bottom: 2rem;
+  justify-content: center;
+  justify-content: space-around;
+}
+
 .player-container{
   background: url('../../../assets/pokemon pack1/Card_background.png') no-repeat center center/cover;
   margin-top: 6rem;
@@ -31,12 +37,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.players{
-  margin-bottom: 2rem;
-  justify-content: center;
-  justify-content: space-around;
+  margin-bottom: 1rem;
 }
 
 // BUTTON
@@ -48,18 +49,17 @@ div[class*=box] {
   align-items: center;
 }
 
-.box-1 { background-color: #FF6766; }
-
 .btn {
   line-height: 25px;
   height: 25px;
   text-align: center;
   width: 382px;
   cursor: pointer;
+  background-color: rgba(255, 255, 0, 0.404);
 }
 
 .btn-one {
-  color: #FFF;
+  color: #000000;
   transition: all 0.3s;
   position: relative;
 }
@@ -82,8 +82,8 @@ div[class*=box] {
   border-bottom-width: 1px;
   border-top-style: solid;
   border-bottom-style: solid;
-  border-top-color: #f1f50a80 ;
-  border-bottom-color:  #f1f50a80 ;
+  border-top-color: #00000080 ;
+  border-bottom-color:  #00000080 ;
   transform: scale(0.1, 1);
 }
 
@@ -114,9 +114,19 @@ div[class*=box] {
 }
 
 
-// formatação dos atributos
+// formatação dos atributos e linha
 
 .attribute{
   text-shadow: black;
   text-size-adjust: 20px;
 }
+
+.line-above {
+  border-top: 3px solid black;
+}
+
+
+
+
+
+

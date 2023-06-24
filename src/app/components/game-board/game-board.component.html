@@ -8,10 +8,11 @@
       <div class="elements-inside">
         <br>
         <div *ngIf="playerCard">
+          
           <h2 style="text-align: center;">{{ playerCard.name.charAt(0).toUpperCase() + playerCard.name.slice(1) }}</h2>
           <img [src]="playerCard.imageUrl" alt="Player Card" class="pokemon-img">
         </div>
-        
+        <div class="line-above"></div>
           <span style="font-size: 15px; font-weight: bold;">
             {{ playerCard?.attack }}
           </span>
