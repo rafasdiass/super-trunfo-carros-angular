@@ -5,7 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent }, // Adicione esta linha para a rota do LoginComponent
+  { path: 'login', component: LoginComponent }, 
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 

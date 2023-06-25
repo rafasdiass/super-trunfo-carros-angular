@@ -1,7 +1,7 @@
 <div class="main-content">
   <div class="container">
-    <div class="flip" [ngClass]="{'flipped': !isLoginView}">
-      <div class="boxCard" *ngIf="isLoginView">
+    <div class="flip">
+      <div class="boxCard">
         <h2>Login</h2>
         <form (ngSubmit)="onLoginSubmit()" class="form-login">
           <input type="email" id="email" name="email" [(ngModel)]="loginEmail" required placeholder="E-mail" />
@@ -12,19 +12,7 @@
             <span>Entrar com o Google</span>
           </button>
         </form>
-        <a (click)="toggleView()">Clique aqui para se registrar</a>
-      </div>
-
-      <div class="boxCard2" *ngIf="!isLoginView">
-        <h2>Cadastro</h2>
-        <form (ngSubmit)="onRegisterSubmit()">
-          <input type="text" id="registerName" name="registerName" [(ngModel)]="registerName" placeholder="Nome">
-          <input type="email" id="registerEmail" name="registerEmail" [(ngModel)]="registerEmail" required placeholder="E-mail"/>
-          <input type="password" id="registerPassword" name="registerPassword" [(ngModel)]="registerPassword" required placeholder="Senha" />
-          <input (blur)="onPassword2Blur()" type="password" id="registerPassword2" name="registerPassword2" [(ngModel)]="registerPassword2" required placeholder="Confirmar senha" />
-          <button type="submit">Cadastrar</button>
-        </form>
-        <a (click)="toggleView(); onFlip()">Clique aqui para entrar</a>
+        <a routerLink="/register">Clique aqui para se registrar</a>
       </div>
     </div>
   </div>

@@ -1,0 +1,11 @@
+<div class="boxCard2">
+  <h2>Cadastro</h2>
+  <form (ngSubmit)="onRegisterSubmit()">
+    <input type="text" id="registerName" name="registerName" [(ngModel)]="registerName" placeholder="Nome">
+    <input type="email" id="registerEmail" name="registerEmail" [(ngModel)]="registerEmail" required placeholder="E-mail"/>
+    <input type="password" id="registerPassword" name="registerPassword" [(ngModel)]="registerPassword" required placeholder="Senha" />
+    <input (blur)="onPassword2Blur()" type="password" id="registerPassword2" name="registerPassword2" [(ngModel)]="registerPassword2" required placeholder="Confirmar senha" />
+    <button type="submit">Cadastrar</button>
+  </form>
+  <a routerLink="/login">Clique aqui para entrar</a>
+</div>
