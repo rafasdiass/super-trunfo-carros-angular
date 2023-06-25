@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { SocialAuthService, GoogleLoginProvider } from 'angularx-social-login';
 import { Router } from '@angular/router';
@@ -7,7 +7,10 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  ngOnInit(): void {
+    console.log('LoginComponent iniciado');
+  }
   loginEmail: string = '';
   loginPassword: string = '';
 
