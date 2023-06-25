@@ -1,0 +1,78 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-content {
+  .container {
+      .flip {
+          .boxCard {
+              background-color: #0076fc;
+              border-radius: 15px;
+              width: 350px;
+              padding: 20px;
+              box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+              h2 {
+                  text-align: center;
+                  color: #000;
+              }
+
+              .form-login {
+                  display: flex;
+                  flex-direction: column;
+
+                  input[type="email"],
+                  input[type="password"] {
+                      padding: 10px;
+                      margin: 10px 0;
+                      border-radius: 5px;
+                      border: 1px solid #CCC;
+                  }
+
+                  button {
+                      padding: 10px;
+                      border-radius: 5px;
+                      border: none;
+                      margin-top: 10px;
+                      color: #000000;
+                      cursor: pointer;
+
+                      &:first-of-type {
+                          background-color: #f2ee07;
+                      }
+
+                      &.google-signin-btn {
+                          background-color: #DB4437;
+
+                          img {
+                              width: 20px;
+                              margin-right: 5px;
+                          }
+
+                          span {
+                              vertical-align: middle;
+                          }
+                      }
+                  }
+              }
+
+              a {
+                  display: block;
+                  margin-top: 15px;
+                  text-align: center;
+                  color: #fefefe;
+                  text-decoration: none;
+
+                  &:hover {
+                      text-decoration: underline;
+                  }
+              }
+          }
+      }
+  }
+}
