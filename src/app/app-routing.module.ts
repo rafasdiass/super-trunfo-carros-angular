@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { PokemonSelectionComponent } from './components/pokemon-selection/pokemon-selection.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
   },
   { path: '', redirectTo: 'home/login', pathMatch: 'full' },
   { path : 'gameboard', component: GameBoardComponent},
+  { path : 'pokeselection', component: PokemonSelectionComponent},
 ];
 
 @NgModule({

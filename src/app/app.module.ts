@@ -18,6 +18,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
+import { PokemonSelectionComponent } from './components/pokemon-selection/pokemon-selection.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE2gfpsz8oZBOE61mn4RpdNjT9qdkrhDI",
@@ -39,6 +40,7 @@ const firebaseConfig = {
     HomeComponent,
     NavbarComponent,
     RegisterComponent,
+    PokemonSelectionComponent,
   ],
   imports: [
     BrowserModule,
