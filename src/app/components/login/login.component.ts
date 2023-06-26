@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
       const response = await this.authService.login({ email: this.loginEmail, password: this.loginPassword });
       console.log('Login bem-sucedido:', response);
       this.router.navigate(['/gameboard']);
+      console.log('chamou a rota:', response);
     } catch (error) {
       console.error('Ocorreu um erro ao fazer login:', error);
     }

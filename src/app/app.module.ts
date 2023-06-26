@@ -1,3 +1,4 @@
+import { AuthGuard } from './services/authguard.service';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { NgModule } from '@angular/core';
@@ -55,17 +56,19 @@ const firebaseConfig = {
     AngularFireAuthModule,
   ],
   providers: [
+    AuthGuard,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: false,
         providers: [
           {
+            provide: AuthGuard,
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider('991015289846-12llmt0clq7u6621njlvmf9lcomn9rqj.apps.googleusercontent.com')
           }
         ]
-      } as SocialAuthServiceConfig,
+      } as unknown as SocialAuthServiceConfig,
     }
   ],
   bootstrap: [AppComponent]
