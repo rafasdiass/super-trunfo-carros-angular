@@ -55,16 +55,16 @@ const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
   ],
-  providers: [
-    AuthGuard,
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            provide: AuthGuard,
-            id: GoogleLoginProvider.PROVIDER_ID,
+
+    providers: [
+      AuthGuard, // <--- Corrigido
+      {
+        provide: 'SocialAuthServiceConfig',
+        useValue: {
+          autoLogin: false,
+          providers: [
+            {
+              provide: GoogleLoginProvider.PROVIDER_ID, 
             provider: new GoogleLoginProvider('991015289846-12llmt0clq7u6621njlvmf9lcomn9rqj.apps.googleusercontent.com')
           }
         ]
