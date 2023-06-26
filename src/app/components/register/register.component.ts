@@ -31,6 +31,7 @@ export class RegisterComponent {
         password: this.registerPassword,
       });
       console.log('Registro bem-sucedido:', response);
+      alert('Usuário criado com sucesso!');
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('Ocorreu um erro ao fazer o registro:', error);
