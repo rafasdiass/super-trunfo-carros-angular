@@ -6,8 +6,11 @@ export class Player {
   cards: Card[] = [];
   currentCard?: Card;
 
-  constructor(id: string, name: string) {
+  constructor(id: string, name: string, cards?: Card[]) {
     this.id = id;
     this.name = name;
+    if (cards) {
+      this.cards = cards;
+    }
   }
 }

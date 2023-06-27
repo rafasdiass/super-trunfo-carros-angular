@@ -11,25 +11,14 @@ import { Player } from '../models/player.model';
 export class UserService {
   constructor(private afAuth: AngularFireAuth, private db: AngularFireDatabase) { }
 
-  getUserPokemon(userId: string): Observable<any> {
-    return this.db.object(`/users/${userId}/pokemon`).valueChanges();
-  }
-
-  setUserPokemon(userId: string, pokemon: any): Promise<void> {
-    return this.db.object(`/users/${userId}/pokemon`).set(pokemon);
-  }
-
-  getPlayer(userId: string): Observable<Player | null> { // Ajustado para Player | null
+  getPlayer(userId: string): Observable<Player | null> {
     return this.db.object(`/players/${userId}`).valueChanges().pipe(
-      map((player: any) => player instanceof Player ? new Player(player.id, player.name) : null),
+      map((player: any) => player instanceof Player ? new Player(player.id, player.name, player.cards) : null),
       catchError(() => of(null)) // Retorna um Observable que emite 'null' se ocorrer um erro.
     );
   }
 
-  setPlayer(player: Player): Promise<void> {
-    return this.db.object(`/players/${player.id}`).set({
-      id: player.id,
-      name: player.name
-    });
+  setPlayer(player: { id: string, name: string, cards: any[] }): Promise<void> {
+    return this.db.object(`/players/${player.id}`).set(player);
   }
 }

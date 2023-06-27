@@ -35,7 +35,10 @@ export class AuthService {
         await result.user.updateProfile({
           displayName: user.name,
         });
+
         const initialPokemon = await this.pokemonService.getRandomPokemon(5);
+        console.log(initialPokemon); // Log the initialPokemon for debugging
+
         await this.userService.setPlayer({
           id: result.user.uid,
           name: user.name,

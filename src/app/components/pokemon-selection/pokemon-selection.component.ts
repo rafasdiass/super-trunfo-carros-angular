@@ -31,22 +31,23 @@ export class PokemonSelectionComponent implements OnInit {
       switchMap((user: any) => {
         if (user && user.uid) {
           this.user = user;
-          return this.userService.getUserPokemon(user.uid);
+          return this.userService.getPlayer(user.uid);
         } else {
-          return of([]);
+          return of(null); // Alterado de [] para null
         }
       }),
-      switchMap((pokemon: any) => {
-        if (pokemon.length === 0) {
+      switchMap((player: Player | null) => {
+        if (player && player.cards.length === 0) {
           return this.pokemonService.getRandomPokemon(5)
             .then(pokemon => {
-              this.pokemon = pokemon;
-              this.userService.setUserPokemon(this.user.uid, pokemon);
+              player.cards = pokemon;
+              this.userService.setPlayer(player);
               return pokemon;
             });
+        } else if (player) {
+          return of(player.cards);
         } else {
-          this.pokemon = pokemon;
-          return of(pokemon);
+          return of([]);
         }
       })
     ).subscribe((pokemon: any) => {
@@ -55,9 +56,6 @@ export class PokemonSelectionComponent implements OnInit {
     });
   }
 
-  selectPokemon(pokemon: any) {
-    // Lógica para selecionar um Pokémon
-  }
 
   navigateToGameBoard() {
     this.router.navigate(['/gameboard']);
