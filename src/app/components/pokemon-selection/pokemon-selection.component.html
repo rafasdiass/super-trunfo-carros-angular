@@ -1,3 +1,30 @@
 <div class="pokemon-selection-container">
-  <!-- Your component's content goes here -->
+  <img src="../../../assets/Pokemon pack1/lab.png" alt="Background Image" class="background-image">
+
+  <!-- Carrossel de Pokémon -->
+  <div *ngIf="pokemon && pokemon.length > 0; else noPokemon" id="pokemonCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div *ngFor="let card of pokemon; let i = index" class="carousel-item" [class.active]="i === 0">
+        <img [src]="card.imageUrl" class="d-block w-100" alt="{{ card.name }} Image">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>{{ card.name }}</h5>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#pokemonCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#pokemonCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+   <!-- Botão para navegar para o Gameboard -->
+   <button (click)="navigateToGameBoard()">Go to Gameboard</button>
+
+  <!-- Mensagem quando não há Pokemon disponível -->
+  <ng-template #noPokemon>
+    <p>No Pokemon available.</p>
+  </ng-template>
 </div>

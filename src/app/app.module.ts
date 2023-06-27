@@ -20,6 +20,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { PokemonSelectionComponent } from './components/pokemon-selection/pokemon-selection.component';
+import { GameService } from './services/game.service'; // <--- Adicionado
 
 const firebaseConfig = {
   apiKey: "AIzaSyBE2gfpsz8oZBOE61mn4RpdNjT9qdkrhDI",
@@ -57,6 +58,7 @@ const firebaseConfig = {
   ],
 
     providers: [
+      GameService,
       AuthGuard, // <--- Corrigido
       {
         provide: 'SocialAuthServiceConfig',
@@ -64,7 +66,7 @@ const firebaseConfig = {
           autoLogin: false,
           providers: [
             {
-              provide: GoogleLoginProvider.PROVIDER_ID, 
+              provide: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider('991015289846-12llmt0clq7u6621njlvmf9lcomn9rqj.apps.googleusercontent.com')
           }
         ]

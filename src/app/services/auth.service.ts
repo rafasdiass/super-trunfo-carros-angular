@@ -3,12 +3,20 @@ import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
+import { first } from 'rxjs/operators';
+import { PokemonService } from './pokemon.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private afAuth: AngularFireAuth, private router: Router) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private userService: UserService,
+    private pokemonService: PokemonService
+  ) {}
 
   async login(credentials: { email: string; password: string }): Promise<firebase.auth.UserCredential> {
     try {
@@ -23,9 +31,15 @@ export class AuthService {
   async register(user: { name: string; email: string; password: string }): Promise<firebase.auth.UserCredential> {
     try {
       const result = await this.afAuth.createUserWithEmailAndPassword(user.email, user.password);
-      if(result.user) {
+      if (result.user) {
         await result.user.updateProfile({
           displayName: user.name,
+        });
+        const initialPokemon = await this.pokemonService.getRandomPokemon(5);
+        await this.userService.setPlayer({
+          id: result.user.uid,
+          name: user.name,
+          cards: initialPokemon
         });
       }
       return result;
@@ -75,9 +89,15 @@ export class AuthService {
         if (email) {
           await this.afAuth.signInWithEmailLink(email, url);
           window.localStorage.removeItem('emailForSignIn');
-
-          // Redirecionar para 'gameboard' após a confirmação bem-sucedida
-          this.router.navigate(['/gameboard']);
+          const user = await this.afAuth.currentUser;
+          if (user) {
+            const player = await this.userService.getPlayer(user.uid).pipe(first()).toPromise();
+            if (player) { // Verifica se o player é null
+              this.router.navigate(['/gameboard', player.id]);
+            } else {
+              console.error('No player found with the given user UID.');
+            }
+          }
         } else {
           console.error('Invalid email');
         }

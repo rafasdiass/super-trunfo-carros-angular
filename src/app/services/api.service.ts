@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Card } from '../models/card.model';
-import { PokemonDetails, Stat, PokemonResponse } from '../models/pokemondetails.model';
+import { PokemonDetails } from '../models/pokemondetails.model';
+import { PokemonResponse } from '../models/pokemonresponse.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class ApiService {
       ),
       map((pokemonDetails: PokemonDetails[]) =>
         pokemonDetails.map((details: PokemonDetails) =>
-          this.transformToCard(details)
+          Card.fromPokemonDetails(details)
         )
       )
     );
@@ -48,7 +49,7 @@ export class ApiService {
       ),
       map((pokemonDetails: PokemonDetails[]) =>
         pokemonDetails.map((details: PokemonDetails) =>
-          this.transformToCard(details)
+          Card.fromPokemonDetails(details)
         )
       )
     );
@@ -57,48 +58,22 @@ export class ApiService {
   fetchRandomCard(): Observable<Card> {
     const url = `${this.API_URL}pokemon?limit=1000`;
 
-    return this.http.get<any>(url).pipe(
-      map((response: any) => {
+    return this.http.get<PokemonResponse>(url).pipe(
+      map(response => {
         const randomIndex = Math.floor(Math.random() * response.results.length);
         return response.results[randomIndex].name;
       }),
-      switchMap((randomPokemon: string) =>
+      switchMap(randomPokemon =>
         this.fetchPokemonDetails(randomPokemon)
       ),
-      map((pokemonDetails: PokemonDetails) =>
-        this.transformToCard(pokemonDetails)
+      map(pokemonDetails =>
+        Card.fromPokemonDetails(pokemonDetails)
       )
     );
   }
 
-  private fetchPokemonDetails(pokemonName: string): Observable<PokemonDetails> {
+  public fetchPokemonDetails(pokemonName: string): Observable<PokemonDetails> {
     const url = `${this.API_URL}pokemon/${pokemonName}`;
-    return this.http.get<any>(url).pipe(
-      map(response => new PokemonDetails(
-        response.id,
-        response.name,
-        response.sprites,
-        response.stats.map((stat: any) => new Stat(stat.base_stat, stat.stat))
-      ))
-    );
-  }
-
-  private transformToCard(pokemonDetails: PokemonDetails): Card {
-    const findStatValue = (statName: string): number => {
-      const stat: Stat | undefined = pokemonDetails.stats.find((stat: { stat: { name: string; }; }) => stat.stat.name === statName);
-      return stat ? stat.base_stat : 0;
-    };
-
-    return new Card(
-      pokemonDetails.id,
-      pokemonDetails.name,
-      pokemonDetails.sprites.front_default,
-      findStatValue('hp'),
-      findStatValue('attack'),
-      findStatValue('defense'),
-      findStatValue('special-attack'),
-      findStatValue('special-defense'),
-      findStatValue('speed')
-    );
+    return this.http.get<PokemonDetails>(url);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, forkJoin } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 
 import { Card } from '../models/card.model';
 import { Player } from '../models/player.model';
@@ -53,6 +53,26 @@ export class GameService {
         }
       );
     });
+  }
+
+  getGame(pokemon: string): Observable<any> {
+    return this.apiService.fetchPokemonDetails(pokemon).pipe(
+      switchMap(pokemonDetails => {
+        const players = this.playersSubject.getValue();
+
+        return forkJoin([
+          ...Array(5).fill(this.apiService.fetchRandomCard())
+        ]).pipe(
+          map(randomCards => {
+            players.forEach((player, index) => {
+              player.cards = [...(player.cards || []), ...(randomCards[index] as Card[])];
+            });
+            this.playersSubject.next(players);
+            return pokemonDetails;
+          })
+        );
+      })
+    );
   }
 
   private shuffleCards(cards: Card[]): void {

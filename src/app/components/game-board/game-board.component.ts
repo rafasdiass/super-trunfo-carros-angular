@@ -25,8 +25,8 @@ export class GameBoardComponent implements OnInit {
   ngOnInit() {
     console.log('OnInit called');
     const players: Player[] = [
-      new Player("Player 1"),
-      new Player("Player 2")
+      new Player('player1', 'Player 1'),  // Corrigido: fornecer o ID e o nome do jogador
+      new Player('player2', 'Player 2')  // Corrigido: fornecer o ID e o nome do jogador
     ];
 
     console.log('Players initialized', players);
@@ -53,12 +53,12 @@ export class GameBoardComponent implements OnInit {
       if (this.playerCard[attribute] > this.computerCard[attribute]) {
         this.winner = 'Player';
         this.playerWins++;
-        window.alert('Voce venceu esse turno');
+        window.alert('Você venceu esse turno.');
 
       } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
         this.winner = 'Computer';
         this.computerWins++;
-        window.alert('Voce perdeu esse turno.');
+        window.alert('Você perdeu esse turno.');
 
       } else {
         this.winner = 'Draw';
@@ -66,7 +66,7 @@ export class GameBoardComponent implements OnInit {
       }
       console.log('Winner of the turn', this.winner);
       this.nextTurn();
-      
+
     } else {
       console.log('End of game, no cards left');
     }
