@@ -19,7 +19,7 @@ const routes: Routes = [
   },
   { path: '', redirectTo: 'home/login', pathMatch: 'full' },
   { path: 'gameboard', component: GameBoardComponent, canActivate: [AuthGuard] },
-  { path: 'pokeselection', component: PokemonSelectionComponent },
+  { path: 'pokeselection', component: PokemonSelectionComponent , canActivate: [AuthGuard]},
 ];
 
 @NgModule({
