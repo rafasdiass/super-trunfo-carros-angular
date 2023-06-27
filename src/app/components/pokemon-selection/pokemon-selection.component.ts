@@ -4,7 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
 import { switchMap, take } from 'rxjs/operators';
 import { Player } from 'src/app/models/player.model';
-import { of } from 'rxjs';
+import { of, from } from 'rxjs'; // Importe 'from' também
 import { PokemonService } from '../../services/pokemon.service';
 import { Router } from '@angular/router';
 
@@ -38,12 +38,14 @@ export class PokemonSelectionComponent implements OnInit {
       }),
       switchMap((player: Player | null) => {
         if (player && player.cards.length === 0) {
-          return this.pokemonService.getRandomPokemon(5)
-            .then(pokemon => {
+          // Use from() para converter Promise em Observable
+          return from(this.pokemonService.getRandomPokemon(5)).pipe(
+            switchMap(pokemon => {
               player.cards = pokemon;
               this.userService.setPlayer(player);
-              return pokemon;
-            });
+              return of(pokemon);
+            })
+          );
         } else if (player) {
           return of(player.cards);
         } else {
@@ -55,7 +57,6 @@ export class PokemonSelectionComponent implements OnInit {
       // Faça algo com o jogo aqui
     });
   }
-
 
   navigateToGameBoard() {
     this.router.navigate(['/gameboard']);
