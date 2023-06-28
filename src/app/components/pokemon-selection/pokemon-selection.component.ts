@@ -60,7 +60,9 @@ export class PokemonSelectionComponent implements OnInit {
           return of([]);
         }
       })
-    ).subscribe((pokemon: any) => {
+    )
+    .subscribe((pokemon: Card[]) => {
+      this.pokemon = pokemon;
       console.log('Subscribe:', pokemon);
     });
   }
