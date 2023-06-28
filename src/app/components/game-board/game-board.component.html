@@ -1,20 +1,24 @@
 <body class="bg-image">
-  <div class="score">
-      <h2 class="text-score">Player<span class="text-score red">{{ playerWins }}</span></h2>
-      <h2>X</h2>
-      <h2 class="text-score"> <span class="text-score red">{{ computerWins }}</span>Computer</h2>
-  </div>
-  <div class="game-container">
-    <div class="player-container" >
-      <div class="elements-inside">
+  <div class="container">
+    <div class="row justify-content-center score">
+      <div class="col-4">
+        <h2 class="text-score">Player <span class="text-score red">{{ playerWins }}</span></h2>
+      </div>
+      <div class="col-4 text-center">
+        <h2>X</h2>
+      </div>
+      <div class="col-4 text-right">
+        <h2 class="text-score"> <span class="text-score red">{{ computerWins }}</span> Computer</h2>
+      </div>
+    </div>
+    <div class="row game-container">
+      <div class="col-md-6 player-container">
         <div class="alert alert-primary" role="alert">
           <app-card [card]="playerCard" [showAttributeButtons]="true" (attributeSelected)="playTurn($event)"></app-card>
         </div>
       </div>
-    </div>
-    <div class="card2">
-      <div class="player2-container">
-        <div class="elements-inside">
+      <div class="col-md-6">
+        <div class="player2-container">
           <app-card [card]="computerCard" [showAttributes]="false"></app-card>
           <div class="rival-message">
             <span class="speech">Ash é um fracassado</span>

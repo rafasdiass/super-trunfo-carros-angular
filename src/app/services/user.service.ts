@@ -10,13 +10,14 @@ import { Card } from '../models/card.model';
   providedIn: 'root'
 })
 export class UserService {
+  private playerPokemon: Card[] = [];
+
   constructor(private afAuth: AngularFireAuth, private db: AngularFireDatabase) { }
 
   getPlayer(userId: string): Observable<Player | null> {
     return this.db.object(`/players/${userId}`).valueChanges().pipe(
       map((player: any) => {
         if (player) {
-          // Transforma a entrada em uma nova instância da classe Player
           const cards: Card[] = player.cards?.map((card: any) => new Card(
             card.id,
             card.name,
@@ -32,13 +33,12 @@ export class UserService {
         }
         return null;
       }),
-      catchError(() => of(null)) // Retorna um Observable que emite 'null' se ocorrer um erro.
+      catchError(() => of(null))
     );
   }
 
   setPlayer(player: Player): Promise<void> {
-    console.log('Setting player with cards: ', player.cards); // Log the cards before setting
-    // Convert player.cards to plain object
+    console.log('Setting player with cards: ', player.cards);
     const playerData = {
       ...player,
       cards: player.cards.map(card => ({
@@ -54,5 +54,13 @@ export class UserService {
       }))
     };
     return this.db.object(`/players/${player.id}`).set(playerData);
+  }
+
+  setPlayerPokemon(pokemon: Card[]): void {
+    this.playerPokemon = pokemon;
+  }
+
+  getPlayerPokemon(): Card[] {
+    return this.playerPokemon;
   }
 }

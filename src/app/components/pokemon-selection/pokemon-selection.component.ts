@@ -1,14 +1,13 @@
-import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
+import { Player } from '../../models/player.model';
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 import { switchMap, take } from 'rxjs/operators';
-import { Player } from 'src/app/models/player.model';
 import { of, from } from 'rxjs';
 import { PokemonService } from '../../services/pokemon.service';
 import { Router } from '@angular/router';
-import { Card } from '../../models/card.model';
-
 
 @Component({
   selector: 'app-pokemon-selection',
@@ -16,7 +15,7 @@ import { Card } from '../../models/card.model';
   styleUrls: ['./pokemon-selection.component.scss']
 })
 export class PokemonSelectionComponent implements OnInit {
-  pokemon: Card[] = []; // assumindo que pokemon é uma lista de Cards
+  pokemon: Card[] = [];
   user: Player | null = null;
 
   constructor(
@@ -33,37 +32,39 @@ export class PokemonSelectionComponent implements OnInit {
       switchMap((user: any) => {
         if (user && user.uid) {
           console.log('User is authenticated with UID:', user.uid);
-          this.user = user;
-          return this.userService.getPlayer(user.uid);
+          return this.userService.getPlayer(user.uid).pipe(
+            switchMap((player: Player | null) => {
+              if (player && player.cards.length === 0) {
+                console.log('Player exists but has no cards');
+                return from(this.pokemonService.getRandomPokemon(5)).pipe(
+                  switchMap(pokemon => {
+                    console.log('Fetched random Pokemon:', pokemon);
+                    player.cards = pokemon;
+                    this.userService.setPlayer(player);
+                    console.log('Player updated with new cards:', player);
+                    return of(pokemon);
+                  })
+                );
+              } else if (player) {
+                console.log('Player exists and has cards:', player);
+                return of(player.cards);
+              } else {
+                console.log('Player does not exist');
+                return of([]);
+              }
+            })
+          );
         } else {
           console.log('User is not authenticated');
           return of(null);
         }
-      }),
-      switchMap((player: Player | null) => {
-        if (player && player.cards.length === 0) {
-          console.log('Player exists but has no cards');
-          return from(this.pokemonService.getRandomPokemon(5)).pipe(
-            switchMap(pokemon => {
-              console.log('Fetched random Pokemon:', pokemon);
-              player.cards = pokemon;
-              this.userService.setPlayer(player);
-              console.log('Player updated with new cards:', player);
-              return of(pokemon);
-            })
-          );
-        } else if (player) {
-          console.log('Player exists and has cards:', player);
-          return of(player.cards);
-        } else {
-          console.log('Player does not exist');
-          return of([]);
-        }
       })
     )
-    .subscribe((pokemon: Card[]) => {
-      this.pokemon = pokemon;
-      console.log('Subscribe:', pokemon);
+    .subscribe((pokemon: Card[] | null) => {
+      if (pokemon !== null) {
+        this.pokemon = pokemon;
+        console.log('Subscribe:', pokemon);
+      }
     });
   }
 

@@ -32,27 +32,17 @@ export class GameService {
   activePlayer$ = this.activePlayerSubject.asObservable();
 
   constructor(private apiService: ApiService) { }
-
-  initializeGame(players: Player[]): Observable<any> {
-    return new Observable((observer) => {
-      this.apiService.fetchFirePokemon().pipe(
-        switchMap((playerCards: Card[]) => {
-          players[0].cards = playerCards;
-          return this.apiService.fetchWaterPokemon();
-        })
-      ).subscribe(
-        (computerCards: Card[]) => {
-          players[1].cards = computerCards;
-          this.playersSubject.next(players);
-          this.activePlayerSubject.next(players[0]);
-          observer.next();
-          observer.complete();
-        },
-        (error) => {
-          observer.error(error);
-        }
-      );
-    });
+  initializeGame(players: Player[]): Observable<Player[]> {
+    return forkJoin([
+      ...Array(5).fill(this.apiService.fetchRandomCard())
+    ]).pipe(
+      map(randomCards => {
+        players[0].cards = randomCards as Card[];
+        this.playersSubject.next(players);
+        this.activePlayerSubject.next(players[0]);
+        return players;
+      })
+    );
   }
 
   getGame(pokemon: string): Observable<any> {
