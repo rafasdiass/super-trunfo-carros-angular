@@ -16,9 +16,9 @@ export class UserService {
 
   getPlayer(userId: string): Observable<Player | null> {
     return this.db.object(`/players/${userId}`).valueChanges().pipe(
-      map((player: any) => {
+      map((player: any) => { // Aqui é onde nós asseguramos que player é de tipo any
         if (player) {
-          const cards: Card[] = player.cards?.map((card: any) => new Card(
+          const cards: Card[] = player.cards?.map((card: Card) => new Card(
             card.id,
             card.name,
             card.imageUrl,
@@ -37,6 +37,7 @@ export class UserService {
     );
   }
 
+
   setPlayer(player: Player): Promise<void> {
     console.log('Setting player with cards: ', player.cards);
     const playerData = {
@@ -53,7 +54,16 @@ export class UserService {
         speed: card.speed
       }))
     };
-    return this.db.object(`/players/${player.id}`).set(playerData);
+
+    console.log('Player data to be saved: ', playerData);
+
+    return this.db.object(`/players/${player.id}`).set(playerData)
+      .then(() => {
+        console.log('Player data saved successfully.');
+      })
+      .catch((error) => {
+        console.error('Error saving player data: ', error);
+      });
   }
 
   setPlayerPokemon(pokemon: Card[]): void {

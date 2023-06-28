@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, forkJoin } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, forkJoin, throwError } from 'rxjs';
+import { switchMap, map, catchError } from 'rxjs/operators';
 
 import { Card } from '../models/card.model';
 import { Player } from '../models/player.model';
 import { ApiService } from './api.service';
+import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,52 +27,79 @@ export class GameService {
 
     this.playersSubject.next(players);
 
+    console.log('Cards drawn:', playerCard, computerCard);  // <-- log here
+
     return [playerCard, computerCard];
   }
 
   players$ = this.playersSubject.asObservable();
   activePlayer$ = this.activePlayerSubject.asObservable();
 
-  constructor(private apiService: ApiService) { }
-  initializeGame(players: Player[]): Observable<Player[]> {
-    return forkJoin([
-      ...Array(5).fill(this.apiService.fetchRandomCard())
-    ]).pipe(
-      map(randomCards => {
-        players[0].cards = randomCards as Card[];
-        this.playersSubject.next(players);
-        this.activePlayerSubject.next(players[0]);
-        return players;
-      })
-    );
-  }
+  constructor(
+    private apiService: ApiService,
+    private userService: UserService,
+    private authService: AuthService
+  ) { }
 
-  getGame(pokemon: string): Observable<any> {
-    return this.apiService.fetchPokemonDetails(pokemon).pipe(
-      switchMap(pokemonDetails => {
-        const players = this.playersSubject.getValue();
+  async initializeGame(): Promise<Player[]> {
+    const user = await this.authService.getUser();
 
-        return forkJoin([
-          ...Array(5).fill(this.apiService.fetchRandomCard())
-        ]).pipe(
-          map(randomCards => {
-            players.forEach((player, index) => {
-              player.cards = [...(player.cards || []), ...(randomCards[index] as Card[])];
-            });
-            this.playersSubject.next(players);
-            return pokemonDetails;
-          })
-        );
-      })
-    );
-  }
-
-  private shuffleCards(cards: Card[]): void {
-    for (let i = cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [cards[i], cards[j]] = [cards[j], cards[i]];
+    if (!user) {
+      throw new Error("User is not authenticated");
     }
+
+    console.log('User authenticated:', user);  // <-- log here
+
+    const playerPokemon = this.userService.getPlayerPokemon();
+
+    console.log('Player Pokemon:', playerPokemon);  // <-- log here
+
+    const players: Player[] = [
+      new Player('player1', 'Player 1', playerPokemon),
+      new Player('player2', 'Player 2')
+    ];
+
+    return new Promise((resolve, reject) => {
+      forkJoin(
+        ...Array(5).fill(this.apiService.fetchRandomCard())
+      ).pipe(
+        switchMap((randomCards: Card[]) => {
+          players[0].cards = randomCards;
+          return forkJoin(
+            ...Array(5).fill(this.apiService.fetchRandomCard())
+          ).pipe(
+            map((randomCards: Card[]) => {
+              players[1].cards = randomCards;
+              this.playersSubject.next(players);
+              this.activePlayerSubject.next(players[0]);
+              console.log('Game initialized:', players);  // <-- log here
+              return players;
+            })
+          );
+        }),
+        catchError((error: any) => {
+          console.error('Error initializing game:', error);
+          return throwError(error);
+        })
+      ).subscribe(
+        players => resolve(players),
+        error => reject(error)
+      );
+    });
   }
 
-  // Coloque qualquer outra lógica de jogo aqui
+  nextTurn(): void {
+    const players = this.playersSubject.getValue();
+    const activePlayer = this.activePlayerSubject.getValue();
+
+    if (!activePlayer || players.length < 2) {
+      return;
+    }
+
+    this.activePlayerSubject.next(
+      activePlayer.id === players[0].id ? players[1] : players[0]
+    );
+
+    console.log('Next turn, active player:', this.activePlayerSubject.getValue());  // <-- log here
+  }
 }

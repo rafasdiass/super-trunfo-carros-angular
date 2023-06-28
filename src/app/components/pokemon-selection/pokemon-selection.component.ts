@@ -64,6 +64,17 @@ export class PokemonSelectionComponent implements OnInit {
       if (pokemon !== null) {
         this.pokemon = pokemon;
         console.log('Subscribe:', pokemon);
+
+        // Initialize the game after the player's cards are set
+        const players: Player[] = [
+          new Player('player1', 'Player 1', pokemon),
+          new Player('player2', 'Player 2')
+        ];
+        this.gameService.initializeGame().then((updatedPlayers: Player[]) => { // Use then in place of subscribe
+          this.router.navigate(['/gameboard']);
+        }).catch(error => {
+          console.error('Error initializing game:', error);
+        });
       }
     });
   }

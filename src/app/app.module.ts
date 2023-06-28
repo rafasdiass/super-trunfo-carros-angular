@@ -56,21 +56,20 @@ const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
   ],
-
-    providers: [
-      GameService,
-      AuthGuard, // <--- Corrigido
-      {
-        provide: 'SocialAuthServiceConfig',
-        useValue: {
-          autoLogin: false,
-          providers: [
-            {
-              provide: GoogleLoginProvider.PROVIDER_ID,
+  providers: [
+    GameService,
+    AuthGuard,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider('991015289846-12llmt0clq7u6621njlvmf9lcomn9rqj.apps.googleusercontent.com')
           }
         ]
-      } as unknown as SocialAuthServiceConfig,
+      } as SocialAuthServiceConfig,
     }
   ],
   bootstrap: [AppComponent]

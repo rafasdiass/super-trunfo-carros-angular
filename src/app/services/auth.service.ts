@@ -18,6 +18,10 @@ export class AuthService {
     private pokemonService: PokemonService
   ) {}
 
+  async getUser(): Promise<firebase.User | null> {
+    return this.afAuth.currentUser;
+  }
+
   async login(credentials: { email: string; password: string }): Promise<firebase.auth.UserCredential> {
     try {
       const result = await this.afAuth.signInWithEmailAndPassword(credentials.email, credentials.password);

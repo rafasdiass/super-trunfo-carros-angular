@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
 import { Player } from '../../models/player.model';
-import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-game-board',
@@ -16,7 +15,7 @@ export class GameBoardComponent implements OnInit {
   playerWins: number;
   computerWins: number;
 
-  constructor(private gameService: GameService, private userService: UserService) {
+  constructor(private gameService: GameService) {
     this.winner = '';
     this.playerWins = 0;
     this.computerWins = 0;
@@ -25,19 +24,8 @@ export class GameBoardComponent implements OnInit {
 
   ngOnInit() {
     console.log('OnInit called');
-
-    const playerPokemon = this.userService.getPlayerPokemon();
-    const players: Player[] = [
-      new Player('player1', 'Player 1', playerPokemon),
-      new Player('player2', 'Player 2')
-    ];
-
-    this.gameService.initializeGame(players).subscribe(updatedPlayers => {
-      console.log('Players initialized with updated cards:', updatedPlayers);
-      // Escolha a primeira carta de cada jogador para começar o jogo
-      this.nextTurn();
-    });
-
+    // Primeira rodada do jogo
+    this.nextTurn();
     console.log('Game initialized');
   }
 
