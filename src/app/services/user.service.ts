@@ -14,13 +14,45 @@ export class UserService {
 
   getPlayer(userId: string): Observable<Player | null> {
     return this.db.object(`/players/${userId}`).valueChanges().pipe(
-      map((player: any) => player instanceof Player ? new Player(player.id, player.name, player.cards) : null),
+      map((player: any) => {
+        if (player) {
+          // Transforma a entrada em uma nova instância da classe Player
+          const cards: Card[] = player.cards?.map((card: any) => new Card(
+            card.id,
+            card.name,
+            card.imageUrl,
+            card.hp,
+            card.attack,
+            card.defense,
+            card.specialAttack,
+            card.specialDefense,
+            card.speed
+          )) || [];
+          return new Player(player.id, player.name, cards);
+        }
+        return null;
+      }),
       catchError(() => of(null)) // Retorna um Observable que emite 'null' se ocorrer um erro.
     );
   }
 
-  setPlayer(player: { id: string, name: string, cards: Card[] }): Promise<void> {
+  setPlayer(player: Player): Promise<void> {
     console.log('Setting player with cards: ', player.cards); // Log the cards before setting
-    return this.db.object(`/players/${player.id}`).set(player);
+    // Convert player.cards to plain object
+    const playerData = {
+      ...player,
+      cards: player.cards.map(card => ({
+        id: card.id,
+        name: card.name,
+        imageUrl: card.imageUrl,
+        hp: card.hp,
+        attack: card.attack,
+        defense: card.defense,
+        specialAttack: card.specialAttack,
+        specialDefense: card.specialDefense,
+        speed: card.speed
+      }))
+    };
+    return this.db.object(`/players/${player.id}`).set(playerData);
   }
 }
