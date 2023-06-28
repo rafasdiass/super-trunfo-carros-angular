@@ -1,51 +1,60 @@
 .pokemon-selection-container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-   background-repeat: no-repeat;
+  min-height: 100vh;
+  background-image: url('../../../assets/Pokemon pack1/lab.png');
+  background-repeat: no-repeat;
   background-size: cover;
+}
 
-  .pokemon-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 200px;
-    padding: 15px;
-    margin: 15px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+.carousel-item img {
+  height: 400px;
+  object-fit: cover;
+}
 
-    img {
-      width: 100%;
-      height: auto;
-    }
+.carousel-caption {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+}
 
-    h2 {
-      font-size: 20px;
-      text-align: center;
-    }
+.carousel-caption h5 {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 0;
+}
 
-    p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
+.carousel-control-prev,
+.carousel-control-next {
+  width: auto;
+  background-color: rgba(255, 255, 255, 0.5);
+}
 
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #ffcb05;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"%3E%3Cpath d="M3.5 0l-3 3h2v1h3v-2h-1v-2h-1v2h-2l3-3zm-2.5 6h-1v2h1v-2z" fill="%23000" /%3E%3C/svg%3E');
+}
 
-      &:hover {
-        background-color: #d1a017;
-      }
-    }
-  }
+.carousel-control-prev-icon {
+  transform: rotate(180deg);
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.button-container button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffcb05;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+  background-color: #d1a017;
 }
