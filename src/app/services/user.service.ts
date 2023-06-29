@@ -1,76 +1,35 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
-
-import { map, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
 import { Player } from '../models/player.model';
-import { Card } from '../models/card.model';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private playerPokemon: Card[] = [];
+  private db = firebase.firestore();
 
-  constructor(private afAuth: AngularFireAuth, private db: AngularFireDatabase) { }
+  constructor() {}
 
-  getPlayer(userId: string): Observable<Player | null> {
-    return this.db.object<Player>(`/players/${userId}`).valueChanges().pipe(
-      map((player: Player | null) => {
-        if (player) {
-          const cards: Card[] = player.cards?.map((card: Card) => new Card(
-            card.id,
-            card.name,
-            card.imageUrl,
-            card.hp,
-            card.attack,
-            card.defense,
-            card.specialAttack,
-            card.specialDefense,
-            card.speed
-          )) || [];
-          return new Player(player.id, player.name, cards);
-        }
-        return null;
-      }),
-      catchError(() => of(null))
-    );
+  async setPlayer(player: Player): Promise<void> {
+    await this.db.collection('players').doc(player.id).set(player);
   }
 
-  setPlayer(player: Player): Promise<void> {
-    console.log('Setting player with cards: ', player.cards);
-    const playerData: Player = {
-      ...player,
-      cards: player.cards?.map((card: Card) => ({
-        id: card.id,
-        name: card.name,
-        imageUrl: card.imageUrl,
-        hp: card.hp,
-        attack: card.attack,
-        defense: card.defense,
-        specialAttack: card.specialAttack,
-        specialDefense: card.specialDefense,
-        speed: card.speed
-      })) || []
-    };
-
-    console.log('Player data to be saved: ', playerData);
-
-    return this.db.object(`/players/${player.id}`).set(playerData)
-      .then(() => {
-        console.log('Player data saved successfully.');
-      })
-      .catch((error) => {
-        console.error('Error saving player data: ', error);
-      });
+  getPlayer(id: string): Promise<Player> {
+    return this.db.collection('players').doc(id).get().then((doc) => {
+      if (doc.exists) {
+        return doc.data() as Player;
+      } else {
+        throw new Error('No player found with id ' + id);
+      }
+    });
   }
 
-  setPlayerPokemon(pokemon: Card[]): void {
-    this.playerPokemon = pokemon;
+  updatePlayer(id: string, changes: Partial<Player>): Promise<void> {
+    return this.db.collection('players').doc(id).update(changes);
   }
 
-  getPlayerPokemon(): Card[] {
-    return this.playerPokemon;
+  removePlayer(id: string): Promise<void> {
+    return this.db.collection('players').doc(id).delete();
   }
 }

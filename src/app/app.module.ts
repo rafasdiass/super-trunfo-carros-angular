@@ -21,15 +21,11 @@ import { PokemonSelectionComponent } from './components/pokemon-selection/pokemo
 import { GameService } from './services/game.service';
 import { environment } from './environment/environment';
 
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { provideStorage, getStorage } from '@angular/fire/storage';
-import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { AuthService } from './services/auth.service';
 import { RouterModule } from '@angular/router';
 
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @NgModule({
   declarations: [
@@ -53,17 +49,12 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
     ReactiveFormsModule,
     SocialLoginModule,
     FlexLayoutModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
-    provideDatabase(() => getDatabase()),
+    RouterModule,
   ],
   providers: [
     GameService,
     AuthGuard,
     AuthService,
-    AngularFireAuth, // Importando AngularFireAuth
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
