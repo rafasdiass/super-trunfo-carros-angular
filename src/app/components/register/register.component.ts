@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -14,7 +14,7 @@ export class RegisterComponent {
   registerPassword2: string = '';
 
   constructor(
-    private authService: AuthService,
+    @Inject(AuthService) private authService: AuthService,
     private router: Router
   ) {}
 

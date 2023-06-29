@@ -3,9 +3,11 @@ import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
 import { first } from 'rxjs/operators';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
 import { PokemonService } from './pokemon.service';
+import firebase from 'firebase/app';
+import 'firebase/auth'; // Importação corrigida
+import 'firebase/firestore';
+import { Card } from '../models/card.model'; // Adicione essa importação
 
 @Injectable({
   providedIn: 'root',
@@ -40,7 +42,8 @@ export class AuthService {
       await this.userService.setPlayer({
         id: result.user.uid,
         name: user.name,
-        cards: initialPokemon
+        // Aqui nós mapeamos o initialPokemon para um array de dados no formato Firestore
+        cards: initialPokemon.map((pokemon: Card) => pokemon.toFirestore())
       });
     }
     return result;

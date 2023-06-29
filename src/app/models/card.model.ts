@@ -1,8 +1,6 @@
 import { PokemonDetails } from './pokemondetails.model';
 
 export class Card {
-  [key: string]: number | string;
-
   constructor(
     public id: number,
     public name: string,
@@ -28,5 +26,8 @@ export class Card {
       pokemonDetails.stats.find((stat) => stat.stat.name === 'speed')?.base_stat || 0
     );
   }
-}
 
+  toFirestore(): Card {
+    return this;
+  }
+}
