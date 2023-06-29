@@ -24,6 +24,9 @@ import { environment } from './environment/environment';
 import { AuthService } from './services/auth.service';
 import { RouterModule } from '@angular/router';
 
+import { AngularFireModule } from '@angular/fire/compat'; // Add this line
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore'; // Add this line
+
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
@@ -50,6 +53,8 @@ import 'firebase/firestore';
     SocialLoginModule,
     FlexLayoutModule,
     RouterModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
   ],
   providers: [
     GameService,
