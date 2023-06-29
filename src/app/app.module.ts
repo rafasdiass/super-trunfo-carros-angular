@@ -29,6 +29,8 @@ import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { AuthService } from './services/auth.service';
 import { RouterModule } from '@angular/router';
 
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,25 +48,22 @@ import { RouterModule } from '@angular/router';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatCardModule,
-
     HttpClientModule,
-
     FormsModule,
     ReactiveFormsModule,
     SocialLoginModule,
     FlexLayoutModule,
-
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     provideDatabase(() => getDatabase()),
-   
   ],
   providers: [
     GameService,
     AuthGuard,
     AuthService,
+    AngularFireAuth, // Importando AngularFireAuth
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
