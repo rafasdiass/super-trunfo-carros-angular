@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireDatabase } from '@angular/fire/database';
+
 import { map, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Player } from '../models/player.model';
@@ -15,8 +16,8 @@ export class UserService {
   constructor(private afAuth: AngularFireAuth, private db: AngularFireDatabase) { }
 
   getPlayer(userId: string): Observable<Player | null> {
-    return this.db.object(`/players/${userId}`).valueChanges().pipe(
-      map((player: any) => { // Aqui é onde nós asseguramos que player é de tipo any
+    return this.db.object<Player>(`/players/${userId}`).valueChanges().pipe(
+      map((player: Player | null) => {
         if (player) {
           const cards: Card[] = player.cards?.map((card: Card) => new Card(
             card.id,
@@ -37,12 +38,11 @@ export class UserService {
     );
   }
 
-
   setPlayer(player: Player): Promise<void> {
     console.log('Setting player with cards: ', player.cards);
-    const playerData = {
+    const playerData: Player = {
       ...player,
-      cards: player.cards.map(card => ({
+      cards: player.cards?.map((card: Card) => ({
         id: card.id,
         name: card.name,
         imageUrl: card.imageUrl,
@@ -52,7 +52,7 @@ export class UserService {
         specialAttack: card.specialAttack,
         specialDefense: card.specialDefense,
         speed: card.speed
-      }))
+      })) || []
     };
 
     console.log('Player data to be saved: ', playerData);

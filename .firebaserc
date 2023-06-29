@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "pokesupertrunfo"
+  },
+  "targets": {
+    "pokesupertrunfo": {
+      "hosting": {
+        "super-trunfo": [
+          "pokesupertrunfo-fcf67"
+        ]
+      }
+    }
   }
 }

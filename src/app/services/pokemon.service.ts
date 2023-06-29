@@ -5,7 +5,7 @@ import { PokemonResponse } from '../models/pokemonresponse.model';
 import { switchMap, map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Card } from '../models/card.model';
-
+import { Stat } from '../models/stat.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,16 +24,16 @@ export class PokemonService {
                 );
                 return forkJoin(requests);
             }),
-            map(pokemonDetailsList => pokemonDetailsList.map(details => new Card(
+            map((pokemonDetailsList: PokemonDetails[]) => pokemonDetailsList.map((details: PokemonDetails) => new Card(
               details.id,
               details.name,
               details.sprites.front_default,
-              details.stats.find(stat => stat.stat.name === 'hp')?.base_stat || 0,
-              details.stats.find(stat => stat.stat.name === 'attack')?.base_stat || 0,
-              details.stats.find(stat => stat.stat.name === 'defense')?.base_stat || 0,
-              details.stats.find(stat => stat.stat.name === 'special-attack')?.base_stat || 0,
-              details.stats.find(stat => stat.stat.name === 'special-defense')?.base_stat || 0,
-              details.stats.find(stat => stat.stat.name === 'speed')?.base_stat || 0,
+              details.stats.find((stat: Stat) => stat.stat.name === 'hp')?.base_stat || 0,
+              details.stats.find((stat: Stat) => stat.stat.name === 'attack')?.base_stat || 0,
+              details.stats.find((stat: Stat) => stat.stat.name === 'defense')?.base_stat || 0,
+              details.stats.find((stat: Stat) => stat.stat.name === 'special-attack')?.base_stat || 0,
+              details.stats.find((stat: Stat) => stat.stat.name === 'special-defense')?.base_stat || 0,
+              details.stats.find((stat: Stat) => stat.stat.name === 'speed')?.base_stat || 0,
             )))
         )
         .toPromise();

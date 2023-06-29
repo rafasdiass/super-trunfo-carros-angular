@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import firebase from 'firebase/compat/app';
+import { UserCredential } from '@firebase/auth-types';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
 import { first } from 'rxjs/operators';
 import { PokemonService } from './pokemon.service';
+import firebase from 'firebase/compat/app';
+
 
 @Injectable({
   providedIn: 'root',
