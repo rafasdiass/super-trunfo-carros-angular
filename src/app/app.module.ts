@@ -1,5 +1,5 @@
 import { AuthGuard } from './services/authguard.service';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
 import { AppRoutingModule } from './app-routing.module';
@@ -24,11 +24,9 @@ import { environment } from './environment/environment';
 import { AuthService } from './services/auth.service';
 import { RouterModule } from '@angular/router';
 
-import { AngularFireModule } from '@angular/fire/compat'; // Add this line
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore'; // Add this line
-
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 @NgModule({
   declarations: [
@@ -52,9 +50,7 @@ import 'firebase/firestore';
     ReactiveFormsModule,
     SocialLoginModule,
     FlexLayoutModule,
-    RouterModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
+    RouterModule
   ],
   providers: [
     GameService,
@@ -71,6 +67,10 @@ import 'firebase/firestore';
           }
         ]
       } as SocialAuthServiceConfig,
+    },
+    {
+      provide: 'FirebaseApp',
+      useValue: firebase.initializeApp(environment.firebase)
     },
   ],
   bootstrap: [AppComponent]

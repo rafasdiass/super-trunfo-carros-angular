@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Player } from '../models/player.model';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import { PokemonService } from './pokemon.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

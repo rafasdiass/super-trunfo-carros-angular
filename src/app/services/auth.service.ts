@@ -3,8 +3,8 @@ import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
 import { first } from 'rxjs/operators';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import { PokemonService } from './pokemon.service';
 
 @Injectable({
