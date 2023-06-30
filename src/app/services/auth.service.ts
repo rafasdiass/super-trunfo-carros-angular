@@ -42,12 +42,12 @@ export class AuthService {
       await this.userService.setPlayer({
         id: result.user.uid,
         name: user.name,
-        // Aqui nós mapeamos o initialPokemon para um array de dados no formato Firestore
         cards: initialPokemon.map((pokemon: Card) => pokemon.toFirestore())
       });
     }
     return result;
   }
+
 
   isAuthenticated(): Observable<firebase.User | null> {
     return from(new Promise<firebase.User | null>((resolve, reject) => {

@@ -29,7 +29,17 @@ export class Card {
     );
   }
 
-  toFirestore(): Card {
-    return this;
+  toFirestore(): any {
+    return {
+      id: this.id,
+      name: this.name,
+      imageUrl: this.imageUrl,
+      hp: this.hp,
+      attack: this.attack,
+      defense: this.defense,
+      specialAttack: this.specialAttack,
+      specialDefense: this.specialDefense,
+      speed: this.speed
+    };
   }
 }

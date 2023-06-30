@@ -4,6 +4,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { PokemonService } from './pokemon.service';
 import { environment } from '../../environments/environment';
+import { Card } from '../models/card.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class UserService {
 
   async setPlayer(player: Player): Promise<void> {
     const cards = await this.pokemonService.getRandomPokemon(5);
-    player.cards = cards;
+    player.cards = cards.map((card: Card) => card.toFirestore());
     await this.db.collection('players').doc(player.id).set(player);
   }
 
