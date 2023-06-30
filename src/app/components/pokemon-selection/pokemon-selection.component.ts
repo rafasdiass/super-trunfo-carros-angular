@@ -59,10 +59,12 @@ export class PokemonSelectionComponent implements OnInit {
       })
     )
     .subscribe((pokemon: unknown) => {
-      const pokemonCards = pokemon as Card[] | null;
-      if (pokemonCards !== null) {
-        this.pokemon = pokemonCards;
-        console.log('Subscribe:', pokemonCards);
+  const pokemonCards = pokemon as Card[] | null;
+  console.log('Type of pokemonCards:', typeof pokemonCards);
+  console.log('Is pokemonCards an array:', Array.isArray(pokemonCards));
+  if (pokemonCards !== null) {
+    this.pokemon = pokemonCards;
+    console.log('Subscribe:', pokemonCards);
 
         // Initialize the game after the player's cards are set
         const players: Player[] = [

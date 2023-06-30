@@ -6,6 +6,7 @@ import { PokemonService } from './pokemon.service';
 import { environment } from '../../environments/environment';
 import { Card } from '../models/card.model';
 
+
 @Injectable({
   providedIn: 'root'
 })
