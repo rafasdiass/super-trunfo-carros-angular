@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
-import { Player } from '../../models/player.model';
 
 @Component({
   selector: 'app-game-board',
@@ -14,54 +13,38 @@ export class GameBoardComponent implements OnInit {
   winner: string;
   playerWins: number;
   computerWins: number;
+  cardAttributes: string[] = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
 
   constructor(private gameService: GameService) {
     this.winner = '';
     this.playerWins = 0;
     this.computerWins = 0;
-    console.log('GameBoardComponent constructor called');
   }
 
   ngOnInit() {
-    console.log('OnInit called');
     // Primeira rodada do jogo
     this.nextTurn();
-    console.log('Game initialized');
   }
 
   nextTurn() {
-    console.log('nextTurn called');
     const drawnCards = this.gameService.drawCards();
     this.playerCard = drawnCards[0];
     this.computerCard = drawnCards[1];
-    console.log('Cards drawn', this.playerCard, this.computerCard);
+    this.winner = '';
   }
 
-  playTurn(attribute: keyof Card) {
-    console.log('playTurn called', attribute);
-
+  playTurn(attribute: string) {
     if (this.playerCard && this.computerCard) {
-      console.log('Both cards available', this.playerCard, this.computerCard);
-
       if (this.playerCard[attribute] > this.computerCard[attribute]) {
         this.winner = 'Player';
         this.playerWins++;
-        window.alert('Você venceu esse turno.');
-
       } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
         this.winner = 'Computer';
         this.computerWins++;
-        window.alert('Você perdeu esse turno.');
-
       } else {
         this.winner = 'Draw';
-        window.alert('This round is a draw.');
       }
-      console.log('Winner of the turn', this.winner);
       this.nextTurn();
-
-    } else {
-      console.log('End of game, no cards left');
     }
   }
 }

@@ -8,18 +8,23 @@
         <h2>X</h2>
       </div>
       <div class="col-4 text-right">
-        <h2 class="text-score"> <span class="text-score red">{{ computerWins }}</span> Computer</h2>
+        <h2 class="text-score"><span class="text-score red">{{ computerWins }}</span> Computer</h2>
       </div>
     </div>
     <div class="row game-container">
       <div class="col-md-6 player-container">
         <div class="alert alert-primary" role="alert">
-          <app-card [card]="playerCard" [showAttributeButtons]="true" (attributeSelected)="playTurn($event)"></app-card>
+          <!-- Assuming you have a component for displaying the card -->
+          <app-card [card]="playerCard"></app-card>
+          <div *ngIf="playerCard">
+            <button *ngFor="let attribute of cardAttributes" (click)="playTurn(attribute)">{{ attribute }}</button>
+          </div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="player2-container">
-          <app-card [card]="computerCard" [showAttributes]="false"></app-card>
+          <!-- Assuming you have a component for displaying the card -->
+          <app-card [card]="computerCard"></app-card>
           <div class="rival-message">
             <span class="speech">Ash é um fracassado</span>
           </div>
@@ -29,5 +34,8 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="d-flex justify-content-center winner-message">
+    <h2>{{ winner }}</h2>
   </div>
 </body>

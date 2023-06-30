@@ -1,6 +1,8 @@
 import { PokemonDetails } from './pokemondetails.model';
 
 export class Card {
+  [key: string]: number | string | Function;
+
   constructor(
     public id: number,
     public name: string,
