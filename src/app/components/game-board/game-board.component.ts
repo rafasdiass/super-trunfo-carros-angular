@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
+import { Player } from 'src/app/models/player.model';
 
 @Component({
   selector: 'app-game-board',
@@ -22,9 +23,22 @@ export class GameBoardComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Subscribe to the players$ observable to get the updated players data
+    this.gameService.players$.subscribe((players: Player[]) => {
+      // Ensure there are exactly 2 players and they have cards
+      if (players.length === 2 && players[0].cards.length > 0 && players[1].cards.length > 0) {
+        this.playerCard = players[0].cards[0];
+        this.computerCard = players[1].cards[0];
+      }
+    });
+
     // Primeira rodada do jogo
-    this.nextTurn();
+    // this.nextTurn(); // No need to call nextTurn here as the subscription above will handle the card drawing
   }
+
+  // rest of the code...
+
+
 
   nextTurn() {
     const drawnCards = this.gameService.drawCards();
