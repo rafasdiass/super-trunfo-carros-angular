@@ -8,6 +8,9 @@ import { switchMap, take } from 'rxjs/operators';
 import { of, from } from 'rxjs';
 import { PokemonService } from '../../services/pokemon.service';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
+import { User } from '../../models/user.model';
+
 
 @Component({
   selector: 'app-pokemon-selection',
@@ -29,42 +32,40 @@ export class PokemonSelectionComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isAuthenticated().pipe(
       take(1),
-      switchMap((user: any) => {
+      switchMap((user: User | null) => {
         if (user && user.uid) {
           console.log('User is authenticated with UID:', user.uid);
-          return this.userService.getPlayer(user.uid).then((player: Player | null) => {
-            if (player && player.cards.length === 0) {
-              console.log('Player exists but has no cards');
-              return from(this.pokemonService.getRandomPokemon(5)).pipe(
-                switchMap(pokemon => {
-                  console.log('Fetched random Pokemon:', pokemon);
-                  player.cards = pokemon;
-                  this.userService.setPlayer(player);
-                  console.log('Player updated with new cards:', player);
-                  return of(pokemon);
-                })
-              );
-            } else if (player) {
-              console.log('Player exists and has cards:', player);
-              return of(player.cards);
-            } else {
-              console.log('Player does not exist');
-              return of([]);
-            }
-          });
+          return from(this.userService.getPlayer(user.uid));
         } else {
           console.log('User is not authenticated');
           return of(null);
         }
+      }),
+      switchMap((player: Player | null) => {
+        if (player && player.cards.length === 0) {
+          console.log('Player exists but has no cards');
+          return from(this.pokemonService.getRandomPokemon(5)).pipe(
+            tap(pokemon => {
+              player!.cards = pokemon;
+              this.userService.setPlayer(player!);
+              console.log('Player updated with new cards:', player);
+            })
+          );
+        } else if (player) {
+          console.log('Player exists and has cards:', player);
+          return of(player.cards);
+        } else {
+          console.log('Player does not exist');
+          return of([]);
+        }
       })
     )
-    .subscribe((pokemon: unknown) => {
-  const pokemonCards = pokemon as Card[] | null;
-  console.log('Type of pokemonCards:', typeof pokemonCards);
-  console.log('Is pokemonCards an array:', Array.isArray(pokemonCards));
-  if (pokemonCards !== null) {
-    this.pokemon = pokemonCards;
-    console.log('Subscribe:', pokemonCards);
+    .subscribe((pokemonCards: Card[] | null) => {
+      console.log('Type of pokemonCards:', typeof pokemonCards);
+      console.log('Is pokemonCards an array:', Array.isArray(pokemonCards));
+      if (pokemonCards !== null) {
+        this.pokemon = pokemonCards;
+        console.log('Subscribe:', pokemonCards);
 
         // Initialize the game after the player's cards are set
         const players: Player[] = [
