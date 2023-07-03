@@ -41,11 +41,11 @@ export class GameBoardComponent implements OnInit {
       if (this.playerCard[attribute] > this.computerCard[attribute]) {
         this.winner = 'Player';
         this.playerWins++;
-        this.gameService.updateWins('playerId'); // Substitua 'playerId' pelo ID real do jogador
+        this.gameService.updateWins('playerId');
       } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
         this.winner = 'Computer';
         this.computerWins++;
-        this.gameService.updateWins('computerId'); // Substitua 'computerId' pelo ID real do computador
+        this.gameService.updateWins('computerId'); 
       } else {
         this.winner = 'Draw';
       }
