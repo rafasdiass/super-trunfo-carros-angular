@@ -42,7 +42,8 @@ export class AuthService {
       await this.userService.setPlayer({
         id: result.user.uid,
         name: user.name,
-        cards: initialPokemon.map((pokemon: Card) => pokemon.toFirestore())
+        cards: initialPokemon.map((pokemon: Card) => pokemon.toFirestore()),
+        wins: 0,  // Adicione a propriedade "wins" aqui
       });
     }
     return result;

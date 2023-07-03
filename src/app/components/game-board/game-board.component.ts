@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
-import { Player } from 'src/app/models/player.model';
+import { Player } from '../../models/player.model';
 
 @Component({
   selector: 'app-game-board',
@@ -9,42 +9,31 @@ import { Player } from 'src/app/models/player.model';
   styleUrls: ['./game-board.component.scss']
 })
 export class GameBoardComponent implements OnInit {
-  playerCard: Card | undefined;
-  computerCard: Card | undefined;
-  winner: string;
-  playerWins: number;
-  computerWins: number;
-  cardAttributes: string[] = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
+  playerCard?: Card;
+  computerCard?: Card;
+  playerWins = 0;
+  computerWins = 0;
+  winner = '';
+  selectedAttribute = '';
 
-  constructor(private gameService: GameService) {
-    this.winner = '';
-    this.playerWins = 0;
-    this.computerWins = 0;
-  }
+  cardAttributes = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
+
+  constructor(private gameService: GameService) { }
 
   ngOnInit() {
-    // Subscribe to the players$ observable to get the updated players data
-    this.gameService.players$.subscribe((players: Player[]) => {
-      // Ensure there are exactly 2 players and they have cards
-      if (players.length === 2 && players[0].cards.length > 0 && players[1].cards.length > 0) {
-        this.playerCard = players[0].cards[0];
-        this.computerCard = players[1].cards[0];
-      }
-    });
-
-    // Primeira rodada do jogo
-    // this.nextTurn(); // No need to call nextTurn here as the subscription above will handle the card drawing
+    this.startGame();
   }
 
-  // rest of the code...
-
-
-
-  nextTurn() {
-    const drawnCards = this.gameService.drawCards();
-    this.playerCard = drawnCards[0];
-    this.computerCard = drawnCards[1];
-    this.winner = '';
+  async startGame() {
+    const players: Player[] = await this.gameService.initializeGame();
+    if (players.length === 2 && players[0].cards.length > 0 && players[1].cards.length > 0) {
+      this.playerCard = players[0].cards[0];
+      this.computerCard = players[1].cards[0];
+      this.gameService.players$.subscribe((players: Player[]) => {
+        this.playerWins = players[0].wins;
+        this.computerWins = players[1].wins;
+      });
+    }
   }
 
   playTurn(attribute: string) {
@@ -52,13 +41,32 @@ export class GameBoardComponent implements OnInit {
       if (this.playerCard[attribute] > this.computerCard[attribute]) {
         this.winner = 'Player';
         this.playerWins++;
+        this.gameService.updateWins('playerId'); // Substitua 'playerId' pelo ID real do jogador
       } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
         this.winner = 'Computer';
         this.computerWins++;
+        this.gameService.updateWins('computerId'); // Substitua 'computerId' pelo ID real do computador
       } else {
         this.winner = 'Draw';
       }
       this.nextTurn();
+    }
+  }
+
+  nextTurn() {
+    const drawnCards = this.gameService.drawCards();
+    this.playerCard = drawnCards[0];
+    this.computerCard = drawnCards[1];
+    if (!this.playerCard || !this.computerCard) {
+      if (this.playerWins > this.computerWins) {
+        this.winner = 'Player wins the game!';
+      } else if (this.playerWins < this.computerWins) {
+        this.winner = 'Computer wins the game!';
+      } else {
+        this.winner = 'Game is a draw!';
+      }
+    } else {
+      this.winner = '';
     }
   }
 }

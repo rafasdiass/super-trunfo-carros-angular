@@ -9,12 +9,12 @@
     <div class="attributes-container"
          *ngFor="let attribute of ['attack', 'defense', 'hp', 'speed', 'specialAttack', 'specialDefense']">
       <span style="font-size: 15px; font-weight: bold;">
-        {{ card[attribute] }}
+        {{ attribute | titlecase }}:
       </span>
+      <span>{{ card[attribute] }}</span>
       <div class="btn btn-one" *ngIf="showAttributeButtons" (click)="selectAttribute(attribute)">
-        <span>{{ attribute | titlecase }}</span>
+        <span>Select</span>
       </div>
-  
     </div>
   </div>
 </div>

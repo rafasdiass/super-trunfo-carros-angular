@@ -13,21 +13,6 @@ export class GameService {
   private playersSubject = new BehaviorSubject<Player[]>([]);
   private activePlayerSubject = new BehaviorSubject<Player | null>(null);
 
-  drawCards(): [Card | undefined, Card | undefined] {
-    const players = this.playersSubject.getValue();
-
-    if (players.length < 2) {
-      return [undefined, undefined];
-    }
-
-    const playerCard = players[0].cards.shift();
-    const computerCard = players[1].cards.shift();
-
-    this.playersSubject.next(players);
-
-    return [playerCard, computerCard];
-  }
-
   players$ = this.playersSubject.asObservable();
   activePlayer$ = this.activePlayerSubject.asObservable();
 
@@ -52,6 +37,32 @@ export class GameService {
     this.activePlayerSubject.next(players[0]);
 
     return players;
+  }
+
+  drawCards(): [Card | undefined, Card | undefined] {
+    const players = this.playersSubject.getValue();
+
+    if (players.length < 2) {
+      return [undefined, undefined];
+    }
+
+    const playerCard = players[0].cards.shift();
+    const computerCard = players[1].cards.shift();
+
+    this.playersSubject.next(players);
+
+    return [playerCard, computerCard];
+  }
+
+  updateWins(playerId: string): void {
+    const players = this.playersSubject.getValue();
+    const player = players.find(player => player.id === playerId);
+
+    if (player) {
+      player.wins++;
+    }
+
+    this.playersSubject.next(players);
   }
 
   nextTurn(): void {

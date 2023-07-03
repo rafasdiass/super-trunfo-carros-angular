@@ -14,7 +14,7 @@ export class CardComponent {
   showAttributeButtons = false;
 
   @Input()
-  showAttributes = true; 
+  showAttributes = true;
 
   @Output()
   attributeSelected = new EventEmitter<string>();
