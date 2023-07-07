@@ -5,9 +5,10 @@ import { UserService } from './user.service';
 import { first } from 'rxjs/operators';
 import { PokemonService } from './pokemon.service';
 import firebase from 'firebase/app';
-import 'firebase/auth'; // Importação corrigida
+import 'firebase/auth';
 import 'firebase/firestore';
-import { Card } from '../models/card.model'; // Adicione essa importação
+import { Card } from '../models/card.model';
+import { Player } from '../models/player.model'; // Import Player class
 
 @Injectable({
   providedIn: 'root',
@@ -37,18 +38,15 @@ export class AuthService {
       });
 
       const initialPokemon = await this.pokemonService.getRandomPokemon(5);
-      console.log(initialPokemon); // Log the initialPokemon for debugging
 
-      await this.userService.setPlayer({
-        id: result.user.uid,
-        name: user.name,
-        cards: initialPokemon.map((pokemon: Card) => pokemon.toFirestore()),
-        wins: 0,  // Adicione a propriedade "wins" aqui
-      });
+      // Criando uma nova instância da classe 'Player'
+      const player = new Player(result.user.uid, user.name, initialPokemon);
+
+      // Call setPlayer with the player.toFirestore()
+      await this.userService.setPlayer(player);
     }
     return result;
   }
-
 
   isAuthenticated(): Observable<firebase.User | null> {
     return from(new Promise<firebase.User | null>((resolve, reject) => {

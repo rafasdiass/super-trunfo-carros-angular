@@ -70,14 +70,20 @@ export class PokemonSelectionComponent implements OnInit {
   }
 
   navigateToGameBoard() {
-    const players: Player[] = [
-      new Player('player1', 'Player 1', this.pokemon),
-      new Player('player2', 'Player 2')
-    ];
-    this.gameService.initializeGame().then(() => {
-      this.router.navigate(['/gameboard']);
+    const player = new Player('player1', 'Player 1', this.pokemon);
+
+    this.userService.setPlayer(player).then(() => {
+      // Passamos 'player' diretamente aqui
+      this.gameService.initializeGame().then(() => {
+        this.router.navigate(['/gameboard']);
+      }).catch(error => {
+        console.error('Error initializing game:', error);
+      });
     }).catch(error => {
-      console.error('Error initializing game:', error);
+      console.error('Error saving player:', error);
     });
   }
+
+
+
 }

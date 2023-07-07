@@ -15,19 +15,33 @@ export class UserService {
   constructor(private pokemonService: PokemonService) {}
 
   async setPlayer(player: Player): Promise<void> {
-    const cards = await this.pokemonService.getRandomPokemon(5);
-    player.cards = cards.map((card: Card) => card.toFirestore());
-    await this.db.collection('players').doc(player.id).set(player);
+    return this.db.doc(`players/${player.id}`).set(player.toFirestore());
   }
 
   async getPlayer(id: string): Promise<Player> {
     const doc = await this.db.collection('players').doc(id).get();
     if (doc.exists) {
-      const data = doc.data() as Player;
-      return new Player(data.id, data.name, data.cards);
-    } else {
-      throw new Error('No player found with id ' + id);
+      const data = doc.data();
+      if (data) {
+        // Map each card data to a Card instance
+        const cards = (data['cards'] as any[]).map(cardData => {
+          return new Card(
+            cardData.id,
+            cardData.name,
+            cardData.imageUrl,
+            cardData.hp,
+            cardData.attack,
+            cardData.defense,
+            cardData.specialAttack,
+            cardData.specialDefense,
+            cardData.speed
+          );
+        });
+        return new Player(data['id'] as string, data['name'] as string, cards);
+      }
     }
+    throw new Error('No player found with id ' + id);
+  
   }
 
   updatePlayer(id: string, changes: Partial<Player>): Promise<void> {
@@ -36,4 +50,5 @@ export class UserService {
 
   removePlayer(id: string): Promise<void> {
     return this.db.collection('players').doc(id).delete();
-  }}
+  }
+}

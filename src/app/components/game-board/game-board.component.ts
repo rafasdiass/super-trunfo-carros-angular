@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { GameService } from '../../services/game.service';
 import { Player } from '../../models/player.model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-game-board',
@@ -18,37 +19,39 @@ export class GameBoardComponent implements OnInit {
 
   cardAttributes = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService, private userService: UserService) { }
 
   ngOnInit() {
     this.startGame();
   }
 
   async startGame() {
-    this.gameService.initializeGame().then((players: Player[]) => {
-      if (players.length === 2 && players[0].cards.length > 0 && players[1].cards.length > 0) {
-        this.playerCard = players[0].cards[0];
-        this.computerCard = players[1].cards[0];
+    const playerId = 'player1'; // ID do jogador, você precisa substituir pelo ID correto
+    try {
+      const player = await this.userService.getPlayer(playerId);
+      if (player && player.cards.length > 0) {
+        this.playerCard = player.cards[0];
         this.gameService.players$.subscribe((players: Player[]) => {
-          this.playerWins = players[0].wins;
-          this.computerWins = players[1].wins;
+          this.playerWins = players.find(p => p.id === playerId)?.wins || 0;
+          this.computerWins = players.find(p => p.id !== playerId)?.wins || 0;
         });
       }
-    }).catch(error => {
-      console.error('Error initializing game:', error);
-    });
+    } catch (error) {
+      console.error('Error fetching player:', error);
+    }
   }
+  
 
   playTurn(attribute: string) {
     if (this.playerCard && this.computerCard) {
       if (this.playerCard[attribute] > this.computerCard[attribute]) {
         this.winner = 'Player';
         this.playerWins++;
-        this.gameService.updateWins('playerId');
+        this.gameService.updateWins('player1');
       } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
         this.winner = 'Computer';
         this.computerWins++;
-        this.gameService.updateWins('computerId');
+        this.gameService.updateWins('player2');
       } else {
         this.winner = 'Draw';
       }

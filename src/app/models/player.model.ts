@@ -14,4 +14,13 @@ export class Player {
       this.cards = cards;
     }
   }
+
+  toFirestore() {
+    return {
+      id: this.id,
+      name: this.name,
+      cards: this.cards.map(card => card.toFirestore ? card.toFirestore() : card),
+      wins: this.wins
+    };
+  }
 }
