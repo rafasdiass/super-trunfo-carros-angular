@@ -25,15 +25,18 @@ export class GameBoardComponent implements OnInit {
   }
 
   async startGame() {
-    const players: Player[] = await this.gameService.initializeGame();
-    if (players.length === 2 && players[0].cards.length > 0 && players[1].cards.length > 0) {
-      this.playerCard = players[0].cards[0];
-      this.computerCard = players[1].cards[0];
-      this.gameService.players$.subscribe((players: Player[]) => {
-        this.playerWins = players[0].wins;
-        this.computerWins = players[1].wins;
-      });
-    }
+    this.gameService.initializeGame().then((players: Player[]) => {
+      if (players.length === 2 && players[0].cards.length > 0 && players[1].cards.length > 0) {
+        this.playerCard = players[0].cards[0];
+        this.computerCard = players[1].cards[0];
+        this.gameService.players$.subscribe((players: Player[]) => {
+          this.playerWins = players[0].wins;
+          this.computerWins = players[1].wins;
+        });
+      }
+    }).catch(error => {
+      console.error('Error initializing game:', error);
+    });
   }
 
   playTurn(attribute: string) {
@@ -45,7 +48,7 @@ export class GameBoardComponent implements OnInit {
       } else if (this.playerCard[attribute] < this.computerCard[attribute]) {
         this.winner = 'Computer';
         this.computerWins++;
-        this.gameService.updateWins('computerId'); 
+        this.gameService.updateWins('computerId');
       } else {
         this.winner = 'Draw';
       }

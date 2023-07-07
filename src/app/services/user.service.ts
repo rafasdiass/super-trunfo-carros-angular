@@ -6,7 +6,6 @@ import { PokemonService } from './pokemon.service';
 import { environment } from '../../environments/environment';
 import { Card } from '../models/card.model';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -21,15 +20,14 @@ export class UserService {
     await this.db.collection('players').doc(player.id).set(player);
   }
 
-  getPlayer(id: string): Promise<Player> {
-    return this.db.collection('players').doc(id).get().then((doc) => {
-      if (doc.exists) {
-        const data = doc.data() as Player;
-        return new Player(data.id, data.name, data.cards);
-      } else {
-        throw new Error('No player found with id ' + id);
-      }
-    });
+  async getPlayer(id: string): Promise<Player> {
+    const doc = await this.db.collection('players').doc(id).get();
+    if (doc.exists) {
+      const data = doc.data() as Player;
+      return new Player(data.id, data.name, data.cards);
+    } else {
+      throw new Error('No player found with id ' + id);
+    }
   }
 
   updatePlayer(id: string, changes: Partial<Player>): Promise<void> {
@@ -38,5 +36,4 @@ export class UserService {
 
   removePlayer(id: string): Promise<void> {
     return this.db.collection('players').doc(id).delete();
-  }
-}
+  }}

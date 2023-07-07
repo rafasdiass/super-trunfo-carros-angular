@@ -20,7 +20,7 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { PokemonSelectionComponent } from './components/pokemon-selection/pokemon-selection.component';
 import { GameService } from './services/game.service';
 import { environment } from './environment/environment';
-
+import { UserService } from './services/user.service';
 import { AuthService } from './services/auth.service';
 import { RouterModule } from '@angular/router';
 
@@ -56,6 +56,7 @@ import 'firebase/auth';
     GameService,
     AuthGuard,
     AuthService,
+    UserService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

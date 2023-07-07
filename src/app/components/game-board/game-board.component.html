@@ -1,29 +1,15 @@
 <body class="bg-image">
   <div class="container">
-    <div class="row justify-content-center score">
-      <div class="col-4">
-        <h2 class="text-score">Player <span class="badge badge-pill badge-danger">{{ playerWins }}</span></h2>
-      </div>
-      <div class="col-4 text-center align-self-center">
-        <h2><i class="bi bi-x-lg"></i></h2>
-      </div>
-      <div class="col-4 text-right">
-        <h2 class="text-score"><span class="badge badge-pill badge-danger">{{ computerWins }}</span> Computer</h2>
-      </div>
-    </div>
+    <!-- Código anterior omitido para maior clareza -->
+
     <div class="row game-container">
       <div class="col-md-6 player-container">
         <div class="alert alert-primary" role="alert">
-          <!-- Assuming you have a component for displaying the card -->
-          <app-card [card]="playerCard"></app-card>
-          <div *ngIf="playerCard">
-            <button class="btn btn-primary" *ngFor="let attribute of cardAttributes" (click)="playTurn(attribute)">{{ attribute }}</button>
-          </div>
+          <app-card [card]="playerCard" [showAttributeButtons]="true" (attributeSelected)="playTurn($event)"></app-card>
         </div>
       </div>
       <div class="col-md-6">
         <div class="player2-container">
-          <!-- Assuming you have a component for displaying the card -->
           <app-card [card]="computerCard"></app-card>
           <div class="rival-message">
             <span class="speech">Ash é um fracassado</span>
