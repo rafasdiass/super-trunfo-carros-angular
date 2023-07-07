@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { User } from '../../models/user.model';
 
-
 @Component({
   selector: 'app-pokemon-selection',
   templateUrl: './pokemon-selection.component.html',
@@ -66,22 +65,19 @@ export class PokemonSelectionComponent implements OnInit {
       if (pokemonCards !== null) {
         this.pokemon = pokemonCards;
         console.log('Subscribe:', pokemonCards);
-
-        // Initialize the game after the player's cards are set
-        const players: Player[] = [
-          new Player('player1', 'Player 1', pokemonCards),
-          new Player('player2', 'Player 2')
-        ];
-        this.gameService.initializeGame().then((updatedPlayers: Player[]) => {
-          this.router.navigate(['/gameboard']);
-        }).catch(error => {
-          console.error('Error initializing game:', error);
-        });
       }
     });
   }
 
   navigateToGameBoard() {
-    this.router.navigate(['/gameboard']);
+    const players: Player[] = [
+      new Player('player1', 'Player 1', this.pokemon),
+      new Player('player2', 'Player 2')
+    ];
+    this.gameService.initializeGame().then(() => {
+      this.router.navigate(['/gameboard']);
+    }).catch(error => {
+      console.error('Error initializing game:', error);
+    });
   }
 }
